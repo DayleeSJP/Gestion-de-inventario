@@ -45,3 +45,11 @@ Route::get('/roles', function () {
 Route::get('/profile', function () {
     return view('pos.profile');
 });
+
+// --- API Routes ---
+Route::prefix('api')->group(function () {
+    Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
+    Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class);
+    Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
+});

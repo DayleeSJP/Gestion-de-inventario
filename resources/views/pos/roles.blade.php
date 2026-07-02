@@ -226,12 +226,18 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('rolesApp', () => ({
-                roles: [
-                    { name: 'Administrador', description: 'Acceso total a todas las funciones del sistema.', color: 'bg-primary', permissionsCount: 29, permissions: ['admin_1', 'cat_1', 'cat_2', 'cat_3', 'comp_1', 'comp_2', 'comp_3', 'prod_1', 'prod_2', 'prod_3', 'prod_4', 'prod_5', 'prod_6', 'rep_1', 'rep_2', 'rep_3', 'caja_1', 'cli_1', 'cli_2', 'cli_3', 'dash_1', 'prov_1', 'prov_2', 'prov_3', 'user_1', 'user_2', 'user_3'] },
-                    { name: 'Vendedor', description: 'Gestión de ventas y visualización de productos.', color: 'bg-secondary', permissionsCount: 12, permissions: ['dash_1', 'prod_6', 'cli_2', 'cli_3'] },
-                    { name: 'Maestro Pastelero', description: 'Gestión de inventario de insumos y recetas.', color: 'bg-tertiary', permissionsCount: 18, permissions: ['prod_1', 'prod_2', 'prod_3'] },
-                    { name: 'Cajero', description: 'Apertura y cierre de caja, cobro de ventas.', color: 'bg-primary-fixed-dim', permissionsCount: 8, permissions: ['caja_1', 'dash_1'] }
-                ],
+                roles: [],
+                init() {
+                    this.fetchRoles();
+                },
+                async fetchRoles() {
+                    try {
+                        const res = await fetch('/api/roles');
+                        this.roles = await res.json();
+                    } catch (error) {
+                        console.error('Error loading roles:', error);
+                    }
+                },
                 colors: ['bg-primary', 'bg-secondary', 'bg-tertiary', 'bg-primary-fixed-dim', 'bg-secondary-container', 'bg-tertiary-container'],
                 modules: [
                     {
@@ -364,24 +370,32 @@
                     this.formData.permissions = [];
                 },
 
-                saveRole() {
+                async saveRole() {
                     if (!this.formData.name.trim()) return alert("Por favor ingresa un nombre para el rol");
                     
                     const roleData = {
                         name: this.formData.name,
                         description: this.formData.description,
                         color: this.formData.color,
-                        permissionsCount: this.formData.permissions.length,
                         permissions: [...this.formData.permissions]
                     };
 
-                    if (this.isEditing) {
-                        this.roles[this.editIndex] = roleData;
-                    } else {
-                        this.roles.push(roleData);
-                    }
+                    const isNew = !this.isEditing;
+                    const url = isNew ? '/api/roles' : `/api/roles/${this.roles[this.editIndex].id}`;
                     
-                    this.closeModal();
+                    try {
+                        const res = await fetch(url, {
+                            method: isNew ? 'POST' : 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(roleData)
+                        });
+                        if (res.ok) {
+                            await this.fetchRoles();
+                            this.closeModal();
+                        }
+                    } catch(error) {
+                        console.error('Error saving:', error);
+                    }
                 },
 
                 confirmDelete(index) {
@@ -389,9 +403,15 @@
                     this.isDeleteModalOpen = true;
                 },
 
-                deleteRole() {
+                async deleteRole() {
                     if (this.deleteIndex !== null) {
-                        this.roles.splice(this.deleteIndex, 1);
+                        const id = this.roles[this.deleteIndex].id;
+                        try {
+                            await fetch(`/api/roles/${id}`, { method: 'DELETE' });
+                            await this.fetchRoles();
+                        } catch (error) {
+                            console.error('Error deleting:', error);
+                        }
                     }
                     this.isDeleteModalOpen = false;
                     this.deleteIndex = null;

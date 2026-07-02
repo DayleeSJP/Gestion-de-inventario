@@ -246,12 +246,18 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('categoriesApp', () => ({
-                categories: [
-                    { name: 'Pasteles de Boda', description: 'Pedidos personalizados de lujo', products: 12, active: true,  icon: 'cake',         color: '#954912' },
-                    { name: 'Bollería Artesanal', description: 'Panes recién horneados diarios', products: 45, active: true,  icon: 'bakery_dining', color: '#03645c' },
-                    { name: 'Galletas & Snacks',  description: 'Galletería fina y empacada',     products: 28, active: false, icon: 'cookie',        color: '#5c5951' },
-                    { name: 'Cafetería',           description: 'Bebidas calientes y frías',       products: 18, active: true,  icon: 'coffee',        color: '#116a61' },
-                ],
+                categories: [],
+                init() {
+                    this.fetchCategories();
+                },
+                async fetchCategories() {
+                    try {
+                        const res = await fetch('/api/categories');
+                        this.categories = await res.json();
+                    } catch (error) {
+                        console.error('Error fetching categories:', error);
+                    }
+                },
 
                 icons: ['cake', 'bakery_dining', 'cookie', 'coffee', 'local_cafe', 'icecream', 'restaurant', 'fastfood', 'set_meal', 'lunch_dining', 'dinner_dining', 'egg'],
                 colors: ['#03645c', '#954912', '#5c5951', '#116a61', '#ba1a1a', '#2d7d74', '#006874', '#7B6FA0', '#6D4C41', '#1565C0'],
@@ -299,7 +305,7 @@
                     this.formError = '';
                 },
 
-                saveCategory() {
+                async saveCategory() {
                     this.formError = '';
                     if (!this.formData.name.trim()) { this.formError = 'El nombre es obligatorio.'; return; }
 
@@ -308,21 +314,39 @@
                         description: this.formData.description,
                         icon: this.formData.icon,
                         color: this.formData.color,
-                        active: this.formData.active,
-                        products: this.formData.products
+                        active: this.formData.active
                     };
 
-                    if (this.isEditing) {
-                        this.categories[this.editIndex] = data;
-                    } else {
-                        this.categories.push(data);
-                    }
+                    const isNew = !this.isEditing;
+                    const url = isNew ? '/api/categories' : `/api/categories/${this.categories[this.editIndex].id}`;
 
-                    this.closeModal();
+                    try {
+                        const res = await fetch(url, {
+                            method: isNew ? 'POST' : 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (res.ok) {
+                            await this.fetchCategories();
+                            this.closeModal();
+                        }
+                    } catch(error) {
+                        console.error('Error saving:', error);
+                    }
                 },
 
-                toggleStatus(index) {
-                    this.categories[index].active = !this.categories[index].active;
+                async toggleStatus(index) {
+                    const cat = this.categories[index];
+                    cat.active = !cat.active;
+                    try {
+                        await fetch(`/api/categories/${cat.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(cat)
+                        });
+                    } catch(error) {
+                        console.error('Error toggling status:', error);
+                    }
                 },
 
                 confirmDelete(index) {
@@ -330,9 +354,15 @@
                     this.isDeleteOpen = true;
                 },
 
-                deleteCategory() {
+                async deleteCategory() {
                     if (this.deleteIndex !== null) {
-                        this.categories.splice(this.deleteIndex, 1);
+                        const id = this.categories[this.deleteIndex].id;
+                        try {
+                            await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+                            await this.fetchCategories();
+                        } catch (error) {
+                            console.error('Error deleting:', error);
+                        }
                     }
                     this.isDeleteOpen = false;
                     this.deleteIndex = null;

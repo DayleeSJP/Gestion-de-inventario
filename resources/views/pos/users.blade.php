@@ -288,11 +288,18 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('usersApp', () => ({
-                users: [
-                    { name: 'Daniela Cunurana', email: 'daniela@dulcecorazon.com', username: 'daniela20', role: 'Administrador', status: 'activo', avatarColor: '#03645c' },
-                    { name: 'Huaman Angelo', email: 'angelo@dulcecorazon.com', username: 'angelo', role: 'Personal Caja', status: 'inactivo', avatarColor: '#954912' },
-                    { name: 'Mateo Rivera', email: 'mateo@dulcecorazon.com', username: 'mateo_v', role: 'Vendedor', status: 'activo', avatarColor: '#5c5951' },
-                ],
+                users: [],
+                init() {
+                    this.fetchUsers();
+                },
+                async fetchUsers() {
+                    try {
+                        const res = await fetch('/api/users');
+                        this.users = await res.json();
+                    } catch (error) {
+                        console.error('Error fetching users:', error);
+                    }
+                },
                 avatarColors: ['#03645c', '#954912', '#5c5951', '#2d7d74', '#ba1a1a', '#116a61', '#753400', '#006874'],
 
                 isModalOpen: false,
@@ -358,7 +365,7 @@
                     this.formError = '';
                 },
 
-                saveUser() {
+                async saveUser() {
                     this.formError = '';
 
                     if (!this.formData.name.trim()) { this.formError = 'El nombre es obligatorio.'; return; }
@@ -372,17 +379,32 @@
                         email: this.formData.email,
                         username: this.formData.username,
                         role: this.formData.role,
-                        status: this.formData.status,
+                        active: this.formData.status === 'activo',
                         avatarColor: this.formData.avatarColor
                     };
-
-                    if (this.isEditing) {
-                        this.users[this.editIndex] = userData;
-                    } else {
-                        this.users.push(userData);
+                    
+                    if (this.formData.password) {
+                        userData.password = this.formData.password;
                     }
 
-                    this.closeModal();
+                    const isNew = !this.isEditing;
+                    const url = isNew ? '/api/users' : `/api/users/${this.users[this.editIndex].id}`;
+
+                    try {
+                        const res = await fetch(url, {
+                            method: isNew ? 'POST' : 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(userData)
+                        });
+                        if (res.ok) {
+                            await this.fetchUsers();
+                            this.closeModal();
+                        } else {
+                            this.formError = 'Error al guardar el usuario. Verifica los datos.';
+                        }
+                    } catch(error) {
+                        console.error('Error saving user:', error);
+                    }
                 },
 
                 confirmDelete(index) {
@@ -390,9 +412,15 @@
                     this.isDeleteModalOpen = true;
                 },
 
-                deleteUser() {
+                async deleteUser() {
                     if (this.deleteIndex !== null) {
-                        this.users.splice(this.deleteIndex, 1);
+                        const id = this.users[this.deleteIndex].id;
+                        try {
+                            await fetch(`/api/users/${id}`, { method: 'DELETE' });
+                            await this.fetchUsers();
+                        } catch (error) {
+                            console.error('Error deleting:', error);
+                        }
                     }
                     this.isDeleteModalOpen = false;
                     this.deleteIndex = null;
