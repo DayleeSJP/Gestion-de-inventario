@@ -1,30 +1,19 @@
-<x-layouts.app>
-    <x-pos.sidebar active="pos" />
-
-    <!-- Main Content Canvas -->
-    <main class="ml-[260px] flex flex-col min-h-screen">
-        <!-- Top App Bar -->
-        <header class="flex justify-between items-center h-16 px-gutter bg-surface dark:bg-surface-dim border-b border-outline-variant sticky top-0 z-40">
-            <div class="flex items-center gap-4 flex-1">
-                <div class="relative w-full max-w-md">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                    <input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-body-md transition-all" placeholder="Buscar producto (nombre o código)..." type="text">
-                </div>
+<x-layouts.app active="pos" title="Punto de Venta">
+    <!-- View Content -->
+    <div class="p-gutter flex flex-col gap-4 min-h-full">
+        <!-- Acciones de la vista -->
+        <div class="flex justify-between items-center bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+            <div class="relative w-full max-w-md">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                <input class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-body-md transition-all" placeholder="Buscar producto (nombre o código)..." type="text">
             </div>
-            <div class="flex items-center gap-4">
-                <button class="relative p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
-                </button>
-                <button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-primary/90 transition-all active:scale-95">
-                    <span class="material-symbols-outlined">add</span>
-                    Nueva Venta
-                </button>
-            </div>
-        </header>
+            <button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-primary/90 transition-all active:scale-95">
+                <span class="material-symbols-outlined">add</span>
+                Nueva Venta
+            </button>
+        </div>
         
-        <!-- View Content -->
-        <div class="p-gutter flex-1 grid grid-cols-12 gap-gutter">
+        <div class="flex-1 grid grid-cols-12 gap-gutter">
             <!-- Left Column: Products and Cart -->
             <div class="col-span-8 flex flex-col gap-gutter">
                 <!-- Productos Frecuentes Bento Card -->
@@ -221,13 +210,13 @@
                 </section>
             </div>
         </div>
+        </div>
         
         <!-- System Footer -->
-        <footer class="h-12 flex items-center justify-center px-gutter border-t border-outline-variant bg-surface-container-low text-on-surface-variant">
+        <footer class="h-12 flex items-center justify-center px-gutter border-t border-outline-variant bg-surface-container-low text-on-surface-variant mt-auto">
             <p class="text-label-md font-label-md">© 2026 — Pastelería Dulce Corazón — Todos los derechos reservados</p>
         </footer>
-    </main>
-    
+    </div>
     <!-- Floating Action Button -->
     <button class="fixed bottom-margin-page right-margin-page w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all z-50">
         <span class="material-symbols-outlined">person_add</span>

@@ -1,36 +1,6 @@
-<x-layouts.app>
-    <x-pos.sidebar active="reports" />
-
-    <!-- Main Content Area -->
-    <main class="ml-[260px] flex-1 flex flex-col min-h-screen overflow-x-hidden bg-surface">
-        <!-- TopAppBar -->
-        <header class="flex justify-between items-center h-16 px-gutter bg-surface dark:bg-surface-dim border-b border-outline-variant sticky top-0 z-40">
-            <div class="flex items-center gap-4 flex-1">
-                <div class="relative max-w-md w-full">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
-                    <input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary transition-shadow" placeholder="Buscar reporte..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <button class="p-2 hover:bg-surface-container-high rounded-full transition-colors relative">
-                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
-                </button>
-                <div class="h-8 w-[1px] bg-outline-variant/50 mx-2"></div>
-                <div class="flex items-center gap-3 pl-2">
-                    <div class="text-right">
-                        <p class="text-label-md font-bold text-on-surface">Pastelería Dulce Corazón</p>
-                        <p class="text-label-sm text-on-surface-variant">Gerente de Tienda</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center overflow-hidden border border-outline-variant/30">
-                        <img class="w-full h-full object-cover" data-alt="Manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBumQWpQzatyS2XBno6R3CKQBWzkI2NI8CNgzzOV3PTbUKjmIFzhJMyx_oY-tGp35mnEPwnTW7ZP8KpNpFkBuD6Xo17x4dg-M8akxZTI7rIqzM0FngKgU-hZwGTWACiB5oJ0gQIVZLDa8-8i-GBOGilzkwwsjP5-2nE-qoAayfxe2I_nSBX7uDXM8S8d7i9GHvwuQ3JkdHDPmVdE_fNH8463qTgiLPBKqGKkqFZHNCMERNTNuUg7iUrYNjOuslq4loMWZ8hqzJMc0I"/>
-                    </div>
-                </div>
-            </div>
-        </header>
-        
-        <!-- Canvas -->
-        <div class="flex-1 p-margin-page">
+<x-layouts.app active="reports" title="Módulo de Reportes">
+    <!-- Canvas -->
+    <div class="p-margin-page">
             <div class="max-w-6xl mx-auto space-y-stack-lg">
                 <!-- Page Header -->
                 <div class="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -138,7 +108,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
         // Micro-interaction for hover states on buttons

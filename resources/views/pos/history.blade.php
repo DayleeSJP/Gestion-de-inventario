@@ -1,32 +1,13 @@
-<x-layouts.app>
-    <x-pos.sidebar active="history" />
+<x-layouts.app active="history" title="Historial de Ventas">
+    <div class="p-margin-page">
+        <!-- Acciones de la vista -->
+        <div class="flex justify-end items-center mb-6">
+            <a href="/pos" class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                Nueva Venta
+            </a>
+        </div>
 
-    <!-- Main Content Canvas -->
-    <main class="flex-1 ml-[260px] h-screen flex flex-col overflow-hidden bg-surface-bright">
-        <!-- TopAppBar -->
-        <header class="flex justify-between items-center w-full px-margin-page py-stack-sm bg-surface-container-low dark:bg-surface-container-high sticky top-0 z-40">
-            <div class="flex items-center gap-4">
-                <h2 class="font-headline-md text-headline-md font-bold text-primary">Historial de Ventas</h2>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors relative">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
-                </button>
-                <button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors">
-                    <span class="material-symbols-outlined">help_outline</span>
-                </button>
-                <div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
-                <a href="/pos" class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
-                    <span class="material-symbols-outlined text-[20px]">add</span>
-                    Nueva Venta
-                </a>
-            </div>
-        </header>
-        
-        <!-- Content Area -->
-        <div class="flex-1 overflow-y-auto p-margin-page custom-scrollbar">
             <!-- Filters Bento Grid Section -->
             <div class="bg-white p-card-padding rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] mb-stack-lg border border-outline-variant/30">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
@@ -272,8 +253,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

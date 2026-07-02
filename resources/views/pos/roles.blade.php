@@ -1,31 +1,5 @@
-<x-layouts.app>
-    <x-pos.sidebar active="roles" />
-
-    <!-- Main Content Canvas -->
-    <main class="ml-[260px] min-h-screen flex flex-col bg-background relative">
-        <!-- TopAppBar -->
-        <header class="sticky top-0 z-40 h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex justify-between items-center px-gutter">
-            <div class="flex items-center gap-4 flex-1">
-                <div class="relative w-full max-w-md">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-                    <input class="w-full bg-surface-container-lowest border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-2 pl-10 text-body-md transition-all" placeholder="Buscar permisos o roles..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button class="hover:bg-surface-container-low dark:hover:bg-surface-container-low rounded-full p-2 transition-all relative">
-                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-surface"></span>
-                </button>
-                <button class="hover:bg-surface-container-low dark:hover:bg-surface-container-low rounded-full p-2 transition-all">
-                    <span class="material-symbols-outlined text-on-surface-variant">help</span>
-                </button>
-                <button class="hover:bg-surface-container-low dark:hover:bg-surface-container-low rounded-full p-2 transition-all">
-                    <span class="material-symbols-outlined text-on-surface-variant">settings</span>
-                </button>
-            </div>
-        </header>
-
-        <div class="p-margin-page flex-1">
+<x-layouts.app active="roles" title="Gestión de Roles y Permisos">
+    <div class="p-margin-page flex-1">
             <!-- Page Header Section -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-stack-lg">
                 <div class="flex items-center gap-4">
@@ -263,31 +237,4 @@
         <button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group z-50">
             <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
         </button>
-    </main>
-
-    <script>
-        // Simple micro-interaction for rows
-        document.querySelectorAll('tr').forEach(row => {
-            row.addEventListener('mouseenter', () => {
-                row.style.transform = 'translateY(-1px)';
-            });
-            row.addEventListener('mouseleave', () => {
-                row.style.transform = 'translateY(0)';
-            });
-        });
-
-        // Search bar focus effect
-        const searchInput = document.querySelector('input[type="text"]');
-        if (searchInput) {
-            const searchIcon = searchInput.previousElementSibling;
-            if (searchIcon) {
-                searchInput.addEventListener('focus', () => {
-                    searchIcon.classList.add('text-primary');
-                });
-                searchInput.addEventListener('blur', () => {
-                    searchIcon.classList.remove('text-primary');
-                });
-            }
-        }
-    </script>
 </x-layouts.app>

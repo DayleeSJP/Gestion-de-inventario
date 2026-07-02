@@ -1,39 +1,6 @@
-<x-layouts.app>
-    <x-pos.sidebar active="reports" />
-
-    <!-- Main Content -->
-    <main class="flex-1 ml-[260px] flex flex-col min-h-screen bg-background">
-        <!-- TopAppBar -->
-        <header class="h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant flex justify-between items-center px-gutter sticky top-0 z-40">
-            <div class="flex items-center gap-4 flex-1">
-                <div class="relative w-full max-w-md">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                    <input class="w-full bg-surface-container-high border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar en el inventario..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2">
-                    <button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors relative">
-                        <span class="material-symbols-outlined">notifications</span>
-                        <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-surface"></span>
-                    </button>
-                    <button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors">
-                        <span class="material-symbols-outlined">account_circle</span>
-                    </button>
-                </div>
-                <div class="h-8 w-[1px] bg-outline-variant"></div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-label-md text-on-surface font-bold leading-none">Daniela C.</p>
-                        <p class="text-label-sm text-on-surface-variant opacity-70">Admin Dulce Corazón</p>
-                    </div>
-                    <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">DC</div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Canvas -->
-        <div class="p-margin-page space-y-gutter flex-1 overflow-y-auto">
+<x-layouts.app active="reports" title="Reporte de Inventario">
+    <!-- Canvas -->
+    <div class="p-margin-page space-y-gutter">
             <!-- Header Section -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -258,8 +225,7 @@
                 </div>
             </div>
         </div>
-    </main>
-
+    </div>
     <script>
         document.querySelectorAll('button, a').forEach(el => {
             if(!el.classList.contains('scale-[1.02]')) {

@@ -1,30 +1,5 @@
-<x-layouts.app>
-    <x-pos.sidebar active="profile" />
-
-    <!-- Main Content Area -->
-    <main class="ml-[260px] min-h-screen flex flex-col bg-background relative">
-        <!-- Top App Bar -->
-        <header class="sticky top-0 right-0 w-full h-16 bg-surface/80 backdrop-blur-md px-gutter flex items-center justify-between z-40 border-b border-outline-variant/30">
-            <div class="flex items-center gap-4">
-                <div class="relative w-80">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-                    <input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary font-body-md text-body-md" placeholder="Buscar en el sistema..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-transform active:scale-95">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-transform active:scale-95">
-                    <span class="material-symbols-outlined">help</span>
-                </button>
-                <button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-transform active:scale-95">
-                    <span class="material-symbols-outlined">settings</span>
-                </button>
-            </div>
-        </header>
-
-        <div class="p-margin-page max-w-5xl mx-auto flex-1 w-full">
+<x-layouts.app active="profile" title="Mi Perfil">
+    <div class="p-margin-page max-w-5xl mx-auto flex-1 w-full">
             <!-- Page Header -->
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -163,36 +138,4 @@
                 <p class="text-outline/60 text-[10px] mt-1">Hecho con pasión por la pastelería tradicional</p>
             </footer>
         </div>
-    </main>
-
-    <!-- Micro-interaction Script -->
-    <script>
-        document.querySelectorAll('.group.relative.flex.items-center').forEach(card => {
-            card.addEventListener('click', function() {
-                // Remove active classes from all
-                document.querySelectorAll('.group.relative.flex.items-center').forEach(c => {
-                    c.classList.remove('bg-primary/5', 'border-primary');
-                    c.classList.add('bg-surface', 'border-surface-variant');
-                    const check = c.querySelector('.bg-primary.rounded-full');
-                    if(check) {
-                        check.classList.add('hidden');
-                        check.classList.remove('flex');
-                    }
-                    const label = c.querySelector('.font-headline-md');
-                    if(label) label.classList.remove('text-primary');
-                });
-                
-                // Add active classes to clicked
-                this.classList.remove('bg-surface', 'border-surface-variant');
-                this.classList.add('bg-primary/5', 'border-primary');
-                const check = this.querySelector('.bg-primary.rounded-full');
-                if(check) {
-                    check.classList.remove('hidden');
-                    check.classList.add('flex');
-                }
-                const label = this.querySelector('.font-headline-md');
-                if(label) label.classList.add('text-primary');
-            });
-        });
-    </script>
 </x-layouts.app>
