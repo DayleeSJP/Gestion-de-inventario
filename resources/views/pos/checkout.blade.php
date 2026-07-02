@@ -139,11 +139,18 @@
                         </div>
                     </div>
                     
-                    <!-- Action Button -->
-                    <button id="btn-confirm-sale" onclick="submitSale()" class="w-full bg-primary-container text-on-primary-container py-5 rounded-xl text-headline-md font-bold flex items-center justify-center gap-3 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg disabled:opacity-50 disabled:pointer-events-none" disabled>
-                        <span class="material-symbols-outlined filled-icon">check_circle</span>
-                        Confirmar Venta
-                    </button>
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col gap-2">
+                        <button id="btn-pending-sale" onclick="submitSale(true)" class="w-full bg-surface-container-highest text-on-surface py-3 rounded-xl text-body-lg font-bold flex items-center justify-center gap-2 hover:bg-outline-variant/50 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none" disabled>
+                            <span class="material-symbols-outlined">schedule</span>
+                            Guardar como Pendiente
+                        </button>
+                        
+                        <button id="btn-confirm-sale" onclick="submitSale(false)" class="w-full bg-primary-container text-on-primary-container py-5 rounded-xl text-headline-md font-bold flex items-center justify-center gap-3 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg disabled:opacity-50 disabled:pointer-events-none" disabled>
+                            <span class="material-symbols-outlined filled-icon">check_circle</span>
+                            Confirmar Venta
+                        </button>
+                    </div>
                 </section>
             </div>
         </div>
@@ -159,6 +166,7 @@
         const searchInput = document.getElementById('product-search');
         const searchResults = document.getElementById('search-results');
         const cartItemsContainer = document.getElementById('cart-items');
+        const btnPending = document.getElementById('btn-pending-sale');
         const totalAmountEl = document.getElementById('total_amount');
         const amountReceivedEl = document.getElementById('amount_received');
         const changeAmountEl = document.getElementById('change_amount');
@@ -232,11 +240,13 @@
                     </tr>
                 `;
                 btnConfirm.disabled = true;
+                btnPending.disabled = true;
                 calculateTotals();
                 return;
             }
 
             btnConfirm.disabled = false;
+            btnPending.disabled = false;
             cartItemsContainer.innerHTML = cart.map((item, index) => `
                 <tr class="hover:bg-surface-container-low transition-colors">
                     <td class="px-4 py-4">
@@ -333,15 +343,21 @@
         });
 
         // Submit Sale
-        function submitSale() {
+        function submitSale(isPending = false) {
             if (cart.length === 0) return;
 
             btnConfirm.disabled = true;
-            btnConfirm.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Procesando...';
+            btnPending.disabled = true;
+            if (isPending) {
+                btnPending.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Procesando...';
+            } else {
+                btnConfirm.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Procesando...';
+            }
 
             const payload = {
                 customer_name: document.getElementById('customer_name').value,
                 payment_method: paymentMethod,
+                is_pending: isPending,
                 items: cart.map(i => ({ id: i.id, quantity: i.qty }))
             };
 
@@ -378,7 +394,9 @@
             })
             .finally(() => {
                 btnConfirm.disabled = false;
+                btnPending.disabled = false;
                 btnConfirm.innerHTML = '<span class="material-symbols-outlined filled-icon">check_circle</span> Confirmar Venta';
+                btnPending.innerHTML = '<span class="material-symbols-outlined">schedule</span> Guardar como Pendiente';
             });
         }
     </script>

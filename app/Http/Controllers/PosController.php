@@ -59,7 +59,7 @@ class PosController extends Controller
                 'total_amount' => $totalAmount,
                 'total_cost' => $totalCost,
                 'payment_method' => strtolower($request->payment_method),
-                'status' => 'pagado',
+                'status' => $request->boolean('is_pending') ? 'pendiente' : 'pagado',
             ]);
 
             foreach ($request->items as $item) {
