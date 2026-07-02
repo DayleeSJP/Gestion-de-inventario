@@ -2,46 +2,30 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('pos.index');
-});
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProfileController;
 
-Route::get('/pos', function () {
-    return view('pos.checkout');
-});
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/pos', [PosController::class, 'index'])->name('pos');
+Route::get('/history', [OrderController::class, 'index'])->name('history');
+Route::post('/orders/{order}/mark-paid', [OrderController::class, 'markPaid'])->name('orders.markPaid');
+Route::get('/orders/{order}/ticket', [OrderController::class, 'showTicket'])->name('orders.ticket');
+Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+Route::post('/pos/checkout', [PosController::class, 'store'])->name('pos.store');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
-Route::get('/history', function () {
-    return view('pos.history');
-});
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
+Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
 
-Route::get('/products', function () {
-    return view('pos.products');
-});
-
-Route::get('/categories', function () {
-    return view('pos.categories');
-});
-
-Route::get('/reports', function () {
-    return view('pos.reports');
-});
-
-Route::get('/reports/sales', function () {
-    return view('pos.reports.sales');
-});
-
-Route::get('/reports/inventory', function () {
-    return view('pos.reports.inventory');
-});
-
-Route::get('/users', function () {
-    return view('pos.users');
-});
-
-Route::get('/roles', function () {
-    return view('pos.roles');
-});
-
-Route::get('/profile', function () {
-    return view('pos.profile');
-});
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

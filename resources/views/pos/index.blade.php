@@ -1,32 +1,91 @@
 <x-layouts.app active="dashboard" title="Dashboard">
     <div class="p-8">
-        <!-- Acciones de la vista -->
-        <div class="flex justify-end items-center mb-8">
-            <div class="flex items-center gap-6">
-                <!-- Search -->
-                <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
-                    <input type="text" placeholder="Buscar..." class="w-64 pl-10 pr-4 py-2 rounded-lg bg-surface border border-surface-variant focus:outline-none focus:ring-1 focus:ring-primary text-sm shadow-sm">
-                </div>
-                <!-- Button -->
-                <button class="bg-primary-container hover:bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">add</span>
-                    Nuevo Pedido
-                </button>
+        
+        <!-- Greeting -->
+        <div class="mb-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">¡Buen día, {{ auth()->user()->name ?? 'Carlos' }}!</h2>
+                <p class="text-gray-500 text-sm">Aquí tienes un resumen de tu negocio. ¡Hoy es un gran día!</p>
             </div>
         </div>
 
-        <!-- Alert Table Section -->
+        <!-- Unified Stat Cards Grid -->
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <!-- Card 1 -->
+            <div class="bg-surface rounded-xl p-5 shadow-sm border-l-4 border-[#2D7D74] relative overflow-hidden flex flex-col justify-between h-32">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 rounded-xl bg-[#EAF7F5] text-[#2D7D74] flex items-center justify-center">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-0.5">{{ $ventasHoy }}</h3>
+                        <p class="text-[11px] text-gray-500 uppercase tracking-wide font-medium">Ventas Completadas</p>
+                    </div>
+                </div>
+                <a href="/history" class="text-[#2D7D74] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10 w-max">
+                    Ver historial <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-surface rounded-xl p-5 shadow-sm border-l-4 border-[#8E44AD] relative overflow-hidden flex flex-col justify-between h-32">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 rounded-xl bg-[#F5EEF8] text-[#8E44AD] flex items-center justify-center">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-0.5">S/{{ number_format($ingresosMes, 2) }}</h3>
+                        <p class="text-[11px] text-gray-500 uppercase tracking-wide font-medium">Ingresos del Mes</p>
+                    </div>
+                </div>
+                <a href="/reports" class="text-[#8E44AD] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10 w-max">
+                    Ver reportes <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-surface rounded-xl p-5 shadow-sm border-l-4 border-[#E74C3C] relative overflow-hidden flex flex-col justify-between h-32">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 rounded-xl bg-[#FDEDEC] text-[#E74C3C] flex items-center justify-center">
+                        <span class="material-symbols-outlined">inventory_2</span>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-0.5">{{ $productosActivos }}</h3>
+                        <p class="text-[11px] text-gray-500 uppercase tracking-wide font-medium">Productos Activos</p>
+                    </div>
+                </div>
+                <a href="/products" class="text-[#E74C3C] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10 w-max">
+                    Ver inventario <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-surface rounded-xl p-5 shadow-sm border-l-4 border-[#F39C12] relative overflow-hidden flex flex-col justify-between h-32">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 rounded-xl bg-[#FEF5E7] text-[#F39C12] flex items-center justify-center">
+                        <span class="material-symbols-outlined">category</span>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-0.5">{{ $categoriasActivas }}</h3>
+                        <p class="text-[11px] text-gray-500 uppercase tracking-wide font-medium">Categorías Disponibles</p>
+                    </div>
+                </div>
+                <a href="/categories" class="text-[#F39C12] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10 w-max">
+                    Ver catálogo <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Alert Table Section (Pending Orders) -->
         <section class="bg-surface rounded-xl shadow-sm border border-surface-variant mb-8 overflow-hidden">
             <div class="bg-[#FFF4EC] px-6 py-4 flex justify-between items-center border-b border-[#FBE6D6]">
                 <div class="flex items-center gap-2 text-[#9A3816]">
                     <span class="material-symbols-outlined">warning</span>
-                    <h3 class="font-semibold text-sm">Pedidos Especiales Pendientes (3)</h3>
+                    <h3 class="font-semibold text-sm">Pedidos Especiales Pendientes (<span id="pending-count">{{ $pendingOrders->count() }}</span>)</h3>
                 </div>
-                <a href="#" class="text-[#9A3816] text-xs font-semibold hover:underline">Ver Todos</a>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-700">
+                <table class="w-full text-left text-sm text-gray-700" id="pending-orders-table">
                     <thead class="text-xs text-gray-500 font-semibold bg-[#FAFAFA] border-b border-surface-variant">
                         <tr>
                             <th class="px-6 py-3 font-semibold">Pedido #</th>
@@ -34,170 +93,77 @@
                             <th class="px-6 py-3 font-semibold">Total</th>
                             <th class="px-6 py-3 font-semibold">Fecha Entrega</th>
                             <th class="px-6 py-3 font-semibold">Estado</th>
-                            <th class="px-6 py-3 font-semibold">Acción</th>
+                            <th class="px-6 py-3 font-semibold text-right">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="px-6 py-4 font-medium">#253</td>
-                            <td class="px-6 py-4">Marcos</td>
-                            <td class="px-6 py-4">S/27.00</td>
-                            <td class="px-6 py-4">28/10/2026</td>
+                        @forelse($pendingOrders as $order)
+                        <tr class="transition-all duration-300 border-b border-gray-100 last:border-0">
+                            <td class="px-6 py-4 font-medium">#{{ $order->id }}</td>
+                            <td class="px-6 py-4">{{ $order->customer_name ?? 'Cliente General' }}</td>
+                            <td class="px-6 py-4 font-semibold text-primary">S/{{ number_format($order->total_amount, 2) }}</td>
+                            <td class="px-6 py-4">{{ $order->created_at->format('d/m/Y') }}</td>
                             <td class="px-6 py-4">
-                                <span class="bg-[#FFE5E5] text-[#C0392B] px-2.5 py-1 rounded-md text-xs font-semibold">Vencido</span>
+                                <span class="bg-[#FFE5E5] text-[#C0392B] px-2.5 py-1 rounded-md text-xs font-semibold">{{ ucfirst($order->status) }}</span>
                             </td>
-                            <td class="px-6 py-4">
-                                <button class="bg-[#2D7D74] hover:bg-[#22635B] text-white px-4 py-1.5 rounded-md text-xs font-medium transition-colors">Pagado</button>
+                            <td class="px-6 py-4 text-right">
+                                <button onclick="markAsPaid(this, {{ $order->id }})" class="bg-[#2D7D74] hover:bg-[#22635B] text-white px-4 py-1.5 rounded-md text-xs font-medium transition-colors shadow-sm">Marcar Pagado</button>
                             </td>
                         </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500 bg-gray-50/50">No hay pedidos pendientes</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
+                <div id="empty-orders-msg" class="hidden p-6 text-center text-gray-500 text-sm bg-gray-50/50">
+                    No hay pedidos especiales pendientes.
+                </div>
             </div>
         </section>
 
-        <!-- Greeting -->
-        <div class="mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-1">¡Feliz día, Carlos!</h2>
-            <p class="text-gray-600 text-sm">Aquí tienes un vistazo a tu panadería hoy.</p>
-        </div>
-
-        <!-- Stat Cards Grid -->
-        <div class="grid grid-cols-4 gap-6 mb-8">
-            <!-- Card 1 -->
-            <div class="bg-surface rounded-xl p-5 shadow-sm border border-surface-variant relative overflow-hidden flex flex-col justify-between h-40">
-                <!-- Decorative Blob -->
-                <div class="absolute top-0 right-0 w-24 h-24 bg-[#EAF7F5] rounded-bl-full -mr-4 -mt-4 opacity-50 pointer-events-none"></div>
-                <div>
-                    <div class="w-8 h-8 rounded-full bg-[#EAF7F5] text-primary flex items-center justify-center mb-4">
-                        <span class="material-symbols-outlined text-lg">cake</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-0.5">18</h3>
-                    <p class="text-xs text-gray-600">Tartas Vendidas Hoy</p>
-                </div>
-                <a href="#" class="text-primary text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10">
-                    Ver Detalles <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </a>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-surface rounded-xl p-5 shadow-sm border border-surface-variant relative overflow-hidden flex flex-col justify-between h-40">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-[#FFF0E6] rounded-bl-full -mr-4 -mt-4 opacity-50 pointer-events-none"></div>
-                <div>
-                    <div class="w-8 h-8 rounded-full bg-[#FFF0E6] text-[#D35400] flex items-center justify-center mb-4">
-                        <span class="material-symbols-outlined text-lg">bakery_dining</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-0.5">45</h3>
-                    <p class="text-xs text-gray-600">Pedidos Pan Completo</p>
-                </div>
-                <a href="#" class="text-[#D35400] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10">
-                    Ver Listado <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </a>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-surface rounded-xl p-5 shadow-sm border border-surface-variant relative overflow-hidden flex flex-col justify-between h-40">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-gray-100 rounded-bl-full -mr-4 -mt-4 opacity-50 pointer-events-none"></div>
-                <div>
-                    <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center mb-4">
-                        <span class="material-symbols-outlined text-lg">restaurant</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-0.5">3</h3>
-                    <p class="text-xs text-gray-600">Recetas Nuevas Creadas</p>
-                </div>
-                <a href="#" class="text-gray-600 text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10">
-                    Ver Catálogo <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </a>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-surface rounded-xl p-5 shadow-sm border border-surface-variant relative overflow-hidden flex flex-col justify-between h-40">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-[#FFE5E5] rounded-bl-full -mr-4 -mt-4 opacity-50 pointer-events-none"></div>
-                <div>
-                    <div class="w-8 h-8 rounded-full bg-[#FFE5E5] text-[#C0392B] flex items-center justify-center mb-4">
-                        <span class="material-symbols-outlined text-lg">shopping_bag</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-0.5">12</h3>
-                    <p class="text-xs text-gray-600">Nuevos Ingredientes</p>
-                </div>
-                <a href="#" class="text-[#C0392B] text-xs font-semibold flex items-center gap-1 hover:underline mt-4 z-10">
-                    Ver Catálogo <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Bottom Section: Chart & Top Sellers -->
+        <!-- Chart & Top Sellers Grid -->
         <div class="grid grid-cols-[2fr_1fr] gap-6 pb-12">
             
             <!-- Chart Section -->
             <div class="bg-surface rounded-xl p-6 shadow-sm border border-surface-variant flex flex-col">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xs font-bold text-gray-900 tracking-wider">VENTAS POR CATEGORÍA — ESTA SEMANA</h3>
-                    <span class="material-symbols-outlined text-gray-400 cursor-pointer hover:text-gray-600">more_vert</span>
-                </div>
-                <!-- Simulated Chart Area -->
-                <div class="flex-1 relative min-h-[200px]">
-                    <div class="absolute inset-0 flex flex-col justify-between text-[10px] text-gray-400">
-                        <div class="border-b border-gray-100 border-dashed w-full pb-1">100</div>
-                        <div class="border-b border-gray-100 border-dashed w-full pb-1">75</div>
-                        <div class="border-b border-gray-100 border-dashed w-full pb-1">50</div>
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#03645c] text-lg">trending_up</span>
+                        <h3 class="text-sm font-bold text-gray-900">Ventas — Últimos 7 Días</h3>
                     </div>
-                    <!-- Chart Curves (SVG Mock) -->
-                    <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-                        <!-- Orange Curve -->
-                        <path d="M 20 100 Q 40 40 60 100" fill="none" stroke="#fd9b5e" stroke-width="1.5" stroke-linecap="round"/>
-                        <!-- Teal Curve -->
-                        <path d="M 50 100 Q 80 10 95 40 T 100 80" fill="none" stroke="#03645c" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
+                    <div class="flex items-center gap-2 text-xs font-medium text-gray-500">
+                        <span class="w-2 h-2 rounded-full bg-[#03645c]"></span> Ingresos diarios
+                    </div>
+                </div>
+                <!-- Real ChartJS Area -->
+                <div class="flex-1 relative w-full h-[300px]">
+                    <canvas id="salesChart"></canvas>
                 </div>
             </div>
 
             <!-- Top Sellers List -->
             <div class="bg-surface rounded-xl p-6 shadow-sm border border-surface-variant flex flex-col">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xs font-bold text-gray-900 tracking-wider">LOS MÁS VENDIDOS</h3>
-                    <span class="text-[10px] text-gray-400 font-medium">Últimos 3 Días</span>
+                <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#F39C12] text-lg">emoji_events</span>
+                        <h3 class="text-sm font-bold text-gray-900">Top Productos</h3>
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-medium">Últimos 7 Días</span>
                 </div>
-                <div class="space-y-5">
-                    <!-- Item 1 -->
-                    <div class="flex justify-between items-center">
+                <div class="space-y-4">
+                    @forelse($topSellers as $index => $seller)
+                    <div class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
                         <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-[#2D7D74] text-white flex items-center justify-center text-xs font-bold">1</div>
-                            <span class="text-sm font-medium text-gray-800">Croissant Clásico</span>
+                            <div class="w-8 h-8 rounded-full {{ $index == 0 ? 'bg-[#F39C12] text-white' : ($index == 1 ? 'bg-[#3498DB] text-white' : ($index == 2 ? 'bg-[#2D7D74] text-white' : 'bg-gray-200 text-gray-600')) }} flex items-center justify-center text-xs font-bold">{{ $index + 1 }}</div>
+                            <span class="text-sm font-medium text-gray-800">{{ $seller->product->name }}</span>
                         </div>
-                        <span class="text-xs text-gray-400 font-medium">120 ud.</span>
+                        <span class="text-xs text-primary font-bold">{{ $seller->total_quantity }} ud.</span>
                     </div>
-                    <!-- Item 2 -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-[#fd9b5e] text-white flex items-center justify-center text-xs font-bold">2</div>
-                            <span class="text-sm font-medium text-gray-800">Tartaleta de Frutas</span>
-                        </div>
-                        <span class="text-xs text-gray-400 font-medium">95 ud.</span>
-                    </div>
-                    <!-- Item 3 -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-[#eae1dc] text-gray-700 flex items-center justify-center text-xs font-bold">3</div>
-                            <span class="text-sm font-medium text-gray-800">Pan de Chocolate</span>
-                        </div>
-                        <span class="text-xs text-gray-400 font-medium">88 ud.</span>
-                    </div>
-                    <!-- Item 4 -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-[#eae1dc] text-gray-700 flex items-center justify-center text-xs font-bold">4</div>
-                            <span class="text-sm font-medium text-gray-800">Bizcocho de Limón</span>
-                        </div>
-                        <span class="text-xs text-gray-400 font-medium">60 ud.</span>
-                    </div>
-                    <!-- Item 5 -->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-[#eae1dc] text-gray-700 flex items-center justify-center text-xs font-bold">5</div>
-                            <span class="text-sm font-medium text-gray-800">Eclair de Crema</span>
-                        </div>
-                        <span class="text-xs text-gray-400 font-medium">45 ud.</span>
-                    </div>
+                    @empty
+                    <div class="text-sm text-gray-400 text-center py-4">No hay ventas recientes.</div>
+                    @endforelse
                 </div>
             </div>
 
@@ -208,4 +174,156 @@
             &copy; 2026 — Pastelería Dulce Corazón — Todos los derechos reservados
         </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-surface-container-high text-on-surface px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span class="material-symbols-outlined text-primary">check_circle</span>
+        <span class="text-sm font-medium">Crédito marcado como pagado correctamente</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Chart Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(3, 100, 92, 0.2)');
+            gradient.addColorStop(1, 'rgba(3, 100, 92, 0)');
+
+            const data = {
+                labels: @json($chartLabels),
+                datasets: [{
+                    label: 'Ingresos diarios (S/)',
+                    data: @json($chartData),
+                    borderColor: '#03645c',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#03645c',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            border: {
+                                display: false
+                            },
+                            grid: {
+                                color: '#f3f4f6',
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return 'S/' + value;
+                                },
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
+                            border: {
+                                display: false
+                            },
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+
+        // Mark as Paid Logic
+        function markAsPaid(button, orderId) {
+            // First, make AJAX request to update DB
+            fetch(`/orders/${orderId}/mark-paid`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const row = button.closest('tr');
+                    
+                    // Fade out the row
+                    row.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        row.remove();
+                        
+                        // Update the badge count
+                        const countSpan = document.getElementById('pending-count');
+                        if (countSpan) {
+                            let currentCount = parseInt(countSpan.innerText);
+                            currentCount = Math.max(0, currentCount - 1);
+                            countSpan.innerText = currentCount;
+                        }
+                        
+                        // Check if table is empty
+                        const tbody = document.querySelector('#pending-orders-table tbody');
+                        if (tbody.children.length === 0 || document.getElementById('pending-count').innerText == '0') {
+                            document.getElementById('pending-orders-table').classList.add('hidden');
+                            document.getElementById('empty-orders-msg').classList.remove('hidden');
+                        }
+                        
+                        // Show toast
+                        const toast = document.getElementById('toast');
+                        toast.classList.remove('translate-y-20', 'opacity-0');
+                        
+                        // Hide toast after 3 seconds
+                        setTimeout(() => {
+                            toast.classList.add('translate-y-20', 'opacity-0');
+                        }, 3000);
+                    }, 300);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </x-layouts.app>
