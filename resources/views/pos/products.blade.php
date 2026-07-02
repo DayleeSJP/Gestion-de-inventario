@@ -1,242 +1,398 @@
 <x-layouts.app active="products" title="Gestión de Productos">
-    <div>
-        <!-- Acciones de la vista -->
-        <div class="px-margin-page pt-margin-page flex justify-end">
-            <button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-body-md text-body-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
-                <span class="material-symbols-outlined" data-icon="add">add</span>
+    <div class="flex flex-col min-h-screen" x-data="productsApp()">
+        <!-- Header -->
+        <div class="px-margin-page pt-margin-page flex justify-between items-end">
+            <div>
+                <nav class="flex text-label-sm text-outline mb-2">
+                    <span>Inventario</span>
+                    <span class="mx-2">/</span>
+                    <span class="text-primary font-bold">Gestión de Productos</span>
+                </nav>
+                <h2 class="font-headline-xl text-headline-xl text-on-surface">Catálogo de Productos</h2>
+                <p class="text-body-md text-on-surface-variant mt-1">Administra tu inventario, precios y disponibilidad.</p>
+            </div>
+            <button @click="openModal()" class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined">add</span>
                 Nuevo Producto
             </button>
         </div>
         
         <!-- Filters & Search Toolbar -->
-        <div class="px-margin-page py-stack-md bg-surface flex flex-wrap items-center gap-gutter">
+        <div class="px-margin-page py-6 mt-6 bg-surface-container-lowest border-y border-outline-variant/30 flex flex-wrap items-center gap-6">
             <div class="relative flex-1 min-w-[300px]">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
-                <input class="w-full pl-12 pr-4 py-2.5 rounded-lg border border-outline-variant bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md transition-all" placeholder="Buscar por nombre, código o categoría..." type="text">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
+                <input x-model="searchQuery" class="w-full pl-12 pr-4 py-3 rounded-xl border border-outline-variant bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md transition-all shadow-sm" placeholder="Buscar por nombre o categoría..." type="text">
             </div>
-            <div class="flex items-center gap-stack-md">
+            <div class="flex items-center gap-4">
                 <div class="flex flex-col gap-1">
-                    <label class="text-label-sm font-label-sm text-on-surface-variant ml-1">Categoría</label>
-                    <select class="bg-white border border-outline-variant rounded-lg px-4 py-2 font-body-md text-body-md min-w-[160px] focus:border-primary outline-none">
-                        <option>Todas</option>
-                        <option>Panadería</option>
-                        <option>Pastelería</option>
-                        <option>Cafetería</option>
+                    <label class="text-label-sm font-semibold text-on-surface-variant ml-1">Categoría</label>
+                    <select x-model="filterCategory" class="bg-white border border-outline-variant rounded-xl px-4 py-2.5 text-body-md min-w-[160px] focus:border-primary outline-none shadow-sm cursor-pointer">
+                        <option value="">Todas</option>
+                        <option value="Panadería">Panadería</option>
+                        <option value="Pastelería">Pastelería</option>
+                        <option value="Cafetería">Cafetería</option>
                     </select>
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label class="text-label-sm font-label-sm text-on-surface-variant ml-1">Stock</label>
-                    <select class="bg-white border border-outline-variant rounded-lg px-4 py-2 font-body-md text-body-md min-w-[160px] focus:border-primary outline-none">
-                        <option>Todos</option>
-                        <option>En Stock</option>
-                        <option>Stock Bajo</option>
-                        <option>Agotado</option>
+                    <label class="text-label-sm font-semibold text-on-surface-variant ml-1">Stock</label>
+                    <select x-model="filterStock" class="bg-white border border-outline-variant rounded-xl px-4 py-2.5 text-body-md min-w-[160px] focus:border-primary outline-none shadow-sm cursor-pointer">
+                        <option value="">Todos</option>
+                        <option value="in_stock">En Stock</option>
+                        <option value="low_stock">Stock Bajo</option>
+                        <option value="out_stock">Agotado</option>
                     </select>
                 </div>
-                <button class="mt-5 flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors border border-outline-variant bg-white">
-                    <span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
-                    <span class="font-label-md text-label-md">Filtros</span>
-                </button>
             </div>
         </div>
         
         <!-- Product Grid -->
-        <div class="px-margin-page pb-margin-page">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter mt-stack-lg">
-                <!-- Product Card 1 -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Croissant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJP9GCzXMD1h0hfbMi22V0flENG-g3su1egnuvyOslrrA7SXlQ4DXBYRRoxqHRYznbLKOJ6fzSZ50JDGOqz7QDsFVHvbu_i_1QrLR-GtS8YpgZRvkLhUK-9x5nPDzsZa2lfDYflq6Z8OjZEcJyIUS9UgipJYpF8zAhsFeOyYCHH1O8GqkPYYzJI7n0acNqTRyLtJjdVoDHLp3F-xPDpru0_8HoiJno0tWlIG6c4dn-SVq7L8EuLr2lfDccw2JCsrlYiuXm2NNZUVk">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-primary-container hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-primary-fixed/30 text-on-primary-fixed-variant rounded text-label-sm font-label-sm">Panadería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 4.50</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Croissant de Mantequilla</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[20px]" data-icon="inventory">inventory</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">42 unidades</span>
+        <div class="px-margin-page py-margin-page flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <template x-for="(prod, index) in filteredProducts" :key="prod.id">
+                    <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden hover:shadow-md hover:border-primary/30 transition-all group flex flex-col h-full"
+                         :class="!prod.active ? 'opacity-60 grayscale-[50%]' : ''">
+                        
+                        <!-- Image Container -->
+                        <div class="relative h-48 overflow-hidden bg-surface-container flex-shrink-0">
+                            <!-- Overlay Agotado -->
+                            <div x-show="prod.stock === 0" class="absolute inset-0 bg-black/40 z-10 flex items-center justify-center backdrop-blur-[2px]">
+                                <span class="text-white font-bold tracking-widest border-2 border-white px-4 py-1 bg-black/20 rounded">AGOTADO</span>
                             </div>
-                            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-md font-label-md">En Stock</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product Card 2 (Low Stock) -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Tarta de Fresas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSJhra_t33SIEIKnBeGq4a1DqHifecL31pJYoyBh8mFWRCW8ny5D57Pqm1iF5jQybNkpw-wezZ2ZLENbfHHENaLpaweAsN5LdxV4o26w9Yd26YnvZqGRoLAURGXh0Uikeca5mbawaGHbgc5GfkWsSlE2ZnVcm7hwrImSgWfhkD78YDrzlyu1LDUsYQI5bgIbvNLTRTnrdmOlF2h3dLvGZlCRfTjQtqYVd-XIn2Q5fT5BI7qfyHXTP5z_T8MjYWZgfrk2ZGCEFwmuU">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-primary-container hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-secondary-fixed/50 text-on-secondary-fixed-variant rounded text-label-sm font-label-sm">Pastelería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 12.00</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Tarta de Fresas</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-secondary text-[20px]" data-icon="warning">warning</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">5 unidades</span>
+                            
+                            <!-- Overlay Inactivo -->
+                            <div x-show="!prod.active" class="absolute inset-0 bg-black/10 z-10 flex items-center justify-center backdrop-blur-[1px]">
+                                <span class="text-white font-bold bg-black/60 px-3 py-1 rounded-full text-label-sm">OCULTO</span>
                             </div>
-                            <span class="bg-secondary-container/20 text-secondary px-3 py-1 rounded-full text-label-md font-label-md">Stock Bajo</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product Card 3 -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Pan de Chocolate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAInWOWYgS1Xit4nLnvkAXFKqGiSVIksvk3cIUNbTNbzNO-FGNeNs2RuCtDWZf0mJUYGUMbRjQI88YM10W608HNWl87mLyg9te_XDnGutvE-qxx3Wb9auSZYuhvPLO63xGf6mPHihcdDRRilu9X4znUa75TmgTMtbzc7B1JTJqqrV3R6ng9JxinIpskBkp284Xb8_c7aCSWtv5C0_CCjXRJLwEqc_ug9KHmfqOLyQ-CBMygtB8ayAO7rHU3vka2wCo7MVOQuojEHag">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-primary-container hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-primary-fixed/30 text-on-primary-fixed-variant rounded text-label-sm font-label-sm">Panadería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 5.50</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Pan de Chocolate</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[20px]" data-icon="inventory">inventory</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">18 unidades</span>
+
+                            <img :src="prod.image" :alt="prod.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            
+                            <!-- Actions Hover -->
+                            <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                <button @click="openModal(prod.originalIndex)" class="p-2.5 bg-white/95 backdrop-blur-sm rounded-full text-primary hover:bg-primary hover:text-white shadow-lg transition-all" title="Editar">
+                                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                                </button>
+                                <button @click="toggleStatus(prod.originalIndex)" class="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg transition-all" :class="prod.active ? 'text-secondary hover:bg-secondary hover:text-white' : 'text-primary hover:bg-primary hover:text-white'" :title="prod.active ? 'Ocultar' : 'Mostrar'">
+                                    <span class="material-symbols-outlined text-[18px]" x-text="prod.active ? 'visibility_off' : 'visibility'"></span>
+                                </button>
+                                <button @click="confirmDelete(prod.originalIndex)" class="p-2.5 bg-white/95 backdrop-blur-sm rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all" title="Eliminar">
+                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                </button>
                             </div>
-                            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-md font-label-md">En Stock</span>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Product Card 4 (Out of Stock) -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <div class="absolute inset-0 bg-on-surface/40 z-10 flex items-center justify-center">
-                            <span class="text-white font-headline-md uppercase tracking-widest border-2 border-white px-4 py-1">Agotado</span>
-                        </div>
-                        <img class="w-full h-full object-cover grayscale transition-transform duration-500 group-hover:scale-110" data-alt="Macarrón Arándano" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFcHaUL2_7JJiGRXwO47agMTbDA00C8w_fy8P8jydHeO1rqPTILdiLanlQEMYGNNsQPBC9U1XD2NyZN_90UW85yxEWPMxkTnDfjj_S2jTULC_6eL03HbnuzEXElrNWzKEyig__jR-Jxj5aU0gDB2U1b_5v38ZIL4gNzKYmCzF02jVf81J_3fB4nbOdr3XhN0NUOH3QGcmLdNCW40EukNm7lwkt3cIA788HtApEDcozmOQZd3V1ZUKIqvxqI6oWhQL0kl6jgsK5L0o">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary shadow-lg">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error shadow-lg">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-secondary-fixed/50 text-on-secondary-fixed-variant rounded text-label-sm font-label-sm">Pastelería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 3.50</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Macarrón Arándano</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-error text-[20px]" data-icon="error_outline">error_outline</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">0 unidades</span>
+
+                        <!-- Content -->
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="px-2.5 py-1 bg-surface-container-high text-on-surface rounded-md text-label-sm font-semibold" x-text="prod.category"></span>
+                                <span class="text-primary font-bold text-title-lg" x-text="`S/ ${prod.price.toFixed(2)}`"></span>
                             </div>
-                            <span class="bg-error-container/50 text-on-error-container px-3 py-1 rounded-full text-label-md font-label-md">Agotado</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product Card 5 -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Hogaza de Masa Madre" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCntGCfp3GY1EfPXC5q1BxU9Q-IDAGrg1MWOzqrNoX_2cK8w1KZBHmdOptmaDeQHsIBTwsoWcIcYaYtICI0pzyLW-1ZA2LVuuHX_WQhkwe69v7c9QKGP56t0Opr4r2vhNG-QdvFUnhJb9h_NQ_QEWnzFjlKyWhxL29RgHDntDGuvd4bGu6Cr7Bz9Qs4u1L8oyYzpahZ_XVepWIjJP2graKETooKfSZx20cN8p3CgS_exCKxhzRHvoDizT3OaAfTaE-yhP5RMxbG3pw">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-primary-container hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-primary-fixed/30 text-on-primary-fixed-variant rounded text-label-sm font-label-sm">Panadería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 8.00</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Hogaza de Masa Madre</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[20px]" data-icon="inventory">inventory</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">12 unidades</span>
+                            <h3 class="font-bold text-title-md text-on-surface mb-auto line-clamp-2" x-text="prod.name"></h3>
+                            
+                            <!-- Stock Footer -->
+                            <div class="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant/30">
+                                <div class="flex items-center gap-2" :class="getStockColorText(prod.stock)">
+                                    <span class="material-symbols-outlined text-[20px]" x-text="getStockIcon(prod.stock)"></span>
+                                    <span class="font-semibold text-body-md" x-text="`${prod.stock} unids`"></span>
+                                </div>
+                                <span :class="getStockBadgeClass(prod.stock)" class="px-3 py-1 rounded-full text-label-sm font-bold" x-text="getStockLabel(prod.stock)"></span>
                             </div>
-                            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-md font-label-md">En Stock</span>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Product Card 6 -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden border border-transparent hover:border-primary-container transition-all group">
-                    <div class="relative h-48 overflow-hidden">
-                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Pastel de Fudge Intenso" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAffP6KdNNmoE9ug7Jrs20nvXUZhB0RjwFBRrIyw5LorV9rsxa7AMmGcjc5RysAbiHC6SPm4yQQHET_lcP2lizSbIA2mFSOEOlYTWXW3OFdmUeUkzspQ5bpbPq3OZ2J1_qr1iMQZBKsu45825F6jn-ZxJCBsFSXshmyw7LlQBICNPkOXPKHvEyRHG1vRHWOa9Ir4O5V-VtrJP9NxoIjLpr5X8K55Nxbxm61tOHLk5bpg8hjAt_3U2E7E3OCFzcN8d1cJcmwvqcrGBg">
-                        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-primary-container hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                            </button>
-                            <button class="p-2 bg-white/90 backdrop-blur rounded-full text-error hover:bg-error hover:text-white shadow-lg transition-all">
-                                <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                            </button>
-                        </div>
+                </template>
+
+                <!-- Empty State -->
+                <div x-show="filteredProducts.length === 0" class="col-span-full py-20 flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-4xl text-outline">search_off</span>
                     </div>
-                    <div class="p-card-padding">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-2 py-0.5 bg-secondary-fixed/50 text-on-secondary-fixed-variant rounded text-label-sm font-label-sm">Pastelería</span>
-                            <span class="text-primary font-bold font-body-lg text-body-lg">S/ 15.00</span>
-                        </div>
-                        <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Pastel de Fudge Intenso</h3>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-[20px]" data-icon="inventory">inventory</span>
-                                <span class="font-body-md text-body-md text-on-surface-variant">8 unidades</span>
-                            </div>
-                            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-md font-label-md">En Stock</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pagination / Load More (Subtle Indicator) -->
-                <div class="col-span-full py-stack-lg flex flex-col items-center gap-stack-md">
-                    <p class="text-body-md text-on-surface-variant">Mostrando 6 de 142 productos</p>
-                    <button class="px-8 py-2.5 border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary-container/10 active:scale-95 transition-all">
-                        Cargar más productos
-                    </button>
+                    <h3 class="text-title-lg font-bold text-on-surface mb-2">No se encontraron productos</h3>
+                    <p class="text-body-md text-on-surface-variant max-w-md">Intenta cambiar los filtros de búsqueda o agrega un nuevo producto al catálogo.</p>
                 </div>
             </div>
         </div>
         
-        <!-- Footer -->
-        <footer class="mt-auto px-margin-page py-6 border-t border-outline-variant bg-surface-container-low flex justify-between items-center text-label-sm text-on-surface-variant">
-            <span>© 2026 — Pastelería Dulce Corazón · Todos los derechos reservados</span>
-            <div class="flex gap-4">
-                <a class="hover:text-primary transition-colors" href="#">Soporte</a>
-                <a class="hover:text-primary transition-colors" href="#">Privacidad</a>
+        <!-- ==================== Modal Nuevo / Editar Producto ==================== -->
+        <div x-show="isModalOpen" style="display:none;" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition.opacity>
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="closeModal()"></div>
+
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col relative z-10 overflow-hidden max-h-[90vh]" x-transition.scale.95>
+                <!-- Header -->
+                <div class="px-6 py-4 border-b border-surface-container flex justify-between items-center bg-surface-container-lowest">
+                    <h3 class="text-title-lg font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary" x-text="isEditing ? 'edit' : 'add_circle'"></span>
+                        <span x-text="isEditing ? 'Editar Producto' : 'Nuevo Producto'"></span>
+                    </h3>
+                    <button @click="closeModal()" class="p-2 text-outline hover:bg-surface-container rounded-full transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="p-6 space-y-5 bg-background overflow-y-auto">
+                    <!-- Preview Imagen -->
+                    <div class="flex flex-col items-center justify-center mb-2">
+                        <div class="relative w-32 h-32 rounded-xl overflow-hidden bg-surface-container border border-outline-variant/30 flex items-center justify-center group mb-3">
+                            <img x-show="formData.image" :src="formData.image" class="w-full h-full object-cover">
+                            <span x-show="!formData.image" class="material-symbols-outlined text-4xl text-outline">image</span>
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                <button @click="$refs.fileInput.click()" type="button" class="bg-white/90 text-primary p-2 rounded-full hover:bg-white transition-colors" title="Subir imagen">
+                                    <span class="material-symbols-outlined text-[20px]">upload</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input x-ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleImageUpload">
+                        <input type="text" x-model="formData.image" class="w-full text-center text-label-sm bg-transparent border-b border-outline-variant focus:border-primary outline-none px-2 py-1" placeholder="O pega la URL de la imagen aquí...">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Nombre -->
+                        <div class="col-span-2">
+                            <label class="block text-label-md font-semibold text-on-surface mb-1">Nombre del Producto <span class="text-error">*</span></label>
+                            <input type="text" x-model="formData.name" class="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-2.5 text-body-md focus:border-primary focus:ring-1 outline-none transition-all" placeholder="Ej. Tarta de Fresas">
+                        </div>
+
+                        <!-- Categoría -->
+                        <div>
+                            <label class="block text-label-md font-semibold text-on-surface mb-1">Categoría</label>
+                            <select x-model="formData.category" class="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-2.5 text-body-md focus:border-primary focus:ring-1 outline-none transition-all cursor-pointer">
+                                <option value="Panadería">Panadería</option>
+                                <option value="Pastelería">Pastelería</option>
+                                <option value="Cafetería">Cafetería</option>
+                            </select>
+                        </div>
+
+                        <!-- Precio -->
+                        <div>
+                            <label class="block text-label-md font-semibold text-on-surface mb-1">Precio (S/) <span class="text-error">*</span></label>
+                            <input type="number" step="0.10" min="0" x-model.number="formData.price" class="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-2.5 text-body-md focus:border-primary focus:ring-1 outline-none transition-all" placeholder="0.00">
+                        </div>
+
+                        <!-- Stock -->
+                        <div>
+                            <label class="block text-label-md font-semibold text-on-surface mb-1">Stock Actual <span class="text-error">*</span></label>
+                            <input type="number" min="0" x-model.number="formData.stock" class="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-4 py-2.5 text-body-md focus:border-primary focus:ring-1 outline-none transition-all" placeholder="0">
+                        </div>
+
+                        <!-- Estado visualización -->
+                        <div class="flex flex-col justify-end pb-2">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" x-model="formData.active" class="w-5 h-5 accent-primary rounded">
+                                <span class="text-body-md font-semibold text-on-surface">Visible en catálogo</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Error -->
+                    <p x-show="formError" x-text="formError" class="text-error text-label-md bg-error-container/30 px-4 py-2 rounded-lg text-center font-semibold"></p>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 border-t border-surface-container bg-surface-container-low flex justify-end gap-3">
+                    <button @click="closeModal()" class="px-5 py-2.5 text-on-surface font-semibold hover:bg-surface-container rounded-lg transition-colors">Cancelar</button>
+                    <button @click="saveProduct()" class="px-5 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                        Guardar Producto
+                    </button>
+                </div>
             </div>
-        </footer>
+        </div>
+
+        <!-- ==================== Modal Eliminar ==================== -->
+        <div x-show="isDeleteOpen" style="display:none;" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition.opacity>
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="isDeleteOpen = false"></div>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center relative z-10" x-transition.scale.95>
+                <div class="w-16 h-16 rounded-full bg-error-container/50 flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-error text-[32px]">delete_forever</span>
+                </div>
+                <h3 class="text-title-lg font-bold mb-2 text-on-surface">¿Eliminar producto?</h3>
+                <p class="text-body-md text-outline mb-1">Se eliminará <strong class="text-on-surface" x-text="deleteIndex !== null ? products[deleteIndex]?.name : ''"></strong>.</p>
+                <p class="text-body-md text-outline mb-6">Esta acción es permanente.</p>
+                <div class="flex gap-3">
+                    <button @click="isDeleteOpen = false" class="flex-1 px-5 py-2.5 text-on-surface font-semibold bg-surface-container-high hover:bg-surface-container-highest rounded-xl transition-colors">Cancelar</button>
+                    <button @click="deleteProduct()" class="flex-1 px-5 py-2.5 bg-error text-white font-bold rounded-xl hover:bg-error/90 transition-colors shadow-sm">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('productsApp', () => ({
+                // Datos iniciales con las imágenes originales
+                products: [],
+                init() {
+                    this.fetchProducts();
+                },
+                async fetchProducts() {
+                    try {
+                        const res = await fetch('/api/products');
+                        this.products = await res.json();
+                    } catch (error) {
+                        console.error('Error fetching products:', error);
+                    }
+                },
+
+                // Buscador y filtros
+                searchQuery: '',
+                filterCategory: '',
+                filterStock: '',
+
+                // Modales
+                isModalOpen: false,
+                isDeleteOpen: false,
+                isEditing: false,
+                editIndex: null,
+                deleteIndex: null,
+                formError: '',
+
+                formData: {
+                    name: '',
+                    category: 'Panadería',
+                    price: 0,
+                    stock: 0,
+                    active: true,
+                    image: ''
+                },
+
+                // Propiedad computada para filtrar
+                get filteredProducts() {
+                    return this.products
+                        .map((prod, index) => ({ ...prod, originalIndex: index })) // Guardamos el index original para editar/borrar
+                        .filter(prod => {
+                            // Filtro texto
+                            const matchSearch = prod.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                                prod.category.toLowerCase().includes(this.searchQuery.toLowerCase());
+                            // Filtro categoría
+                            const matchCat = this.filterCategory === '' || prod.category === this.filterCategory;
+                            // Filtro stock
+                            let matchStock = true;
+                            if (this.filterStock === 'in_stock') matchStock = prod.stock > 10;
+                            if (this.filterStock === 'low_stock') matchStock = prod.stock > 0 && prod.stock <= 10;
+                            if (this.filterStock === 'out_stock') matchStock = prod.stock === 0;
+
+                            return matchSearch && matchCat && matchStock;
+                        });
+                },
+
+                // UI Helpers para Stock
+                getStockLabel(stock) {
+                    if (stock === 0) return 'Agotado';
+                    if (stock <= 10) return 'Stock Bajo';
+                    return 'En Stock';
+                },
+                getStockBadgeClass(stock) {
+                    if (stock === 0) return 'bg-error-container/50 text-on-error-container';
+                    if (stock <= 10) return 'bg-secondary-container/50 text-on-secondary-container';
+                    return 'bg-primary/10 text-primary';
+                },
+                getStockIcon(stock) {
+                    if (stock === 0) return 'error';
+                    if (stock <= 10) return 'warning';
+                    return 'inventory';
+                },
+                getStockColorText(stock) {
+                    if (stock === 0) return 'text-error';
+                    if (stock <= 10) return 'text-secondary';
+                    return 'text-primary';
+                },
+
+                // Helper para subir imagen
+                handleImageUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.formData.image = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                // Lógica Modales CRUD
+                openModal(index = null) {
+                    this.isEditing = index !== null;
+                    this.editIndex = index;
+                    this.formError = '';
+
+                    if (this.isEditing) {
+                        const p = this.products[index];
+                        this.formData = { ...p };
+                    } else {
+                        this.formData = { 
+                            name: '', 
+                            category: 'Panadería', 
+                            price: 0, 
+                            stock: 0, 
+                            active: true, 
+                            image: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?q=80&w=600&auto=format&fit=crop' 
+                        };
+                    }
+                    this.isModalOpen = true;
+                },
+
+                closeModal() {
+                    this.isModalOpen = false;
+                    this.formError = '';
+                },
+
+                async saveProduct() {
+                    this.formError = '';
+                    if (!this.formData.name.trim()) { this.formError = 'El nombre es obligatorio.'; return; }
+                    if (this.formData.price <= 0) { this.formError = 'El precio debe ser mayor a 0.'; return; }
+                    if (this.formData.stock < 0) { this.formError = 'El stock no puede ser negativo.'; return; }
+
+                    const isNew = !this.isEditing;
+                    const url = isNew ? '/api/products' : `/api/products/${this.products[this.editIndex].id}`;
+
+                    try {
+                        const res = await fetch(url, {
+                            method: isNew ? 'POST' : 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.formData)
+                        });
+                        if (res.ok) {
+                            await this.fetchProducts();
+                            this.closeModal();
+                        }
+                    } catch(error) {
+                        console.error('Error saving:', error);
+                    }
+                },
+
+                async toggleStatus(index) {
+                    const prod = this.products[index];
+                    prod.active = !prod.active;
+                    try {
+                        await fetch(`/api/products/${prod.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(prod)
+                        });
+                    } catch(error) {
+                        console.error('Error toggling status:', error);
+                    }
+                },
+
+                confirmDelete(index) {
+                    this.deleteIndex = index;
+                    this.isDeleteOpen = true;
+                },
+
+                async deleteProduct() {
+                    if (this.deleteIndex !== null) {
+                        const id = this.products[this.deleteIndex].id;
+                        try {
+                            await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                            await this.fetchProducts();
+                        } catch (error) {
+                            console.error('Error deleting:', error);
+                        }
+                    }
+                    this.isDeleteOpen = false;
+                    this.deleteIndex = null;
+                }
+            }));
+        });
+    </script>
 </x-layouts.app>

@@ -64,14 +64,19 @@
             </a>
         </div>
     </nav>
-    <div class="px-4 mt-auto pt-6 border-t border-outline-variant/30 space-y-1">
+    <div class="px-4 mt-auto pt-6 border-t border-outline-variant/30 space-y-1" x-data="sidebarUser()">
         <a href="/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl {{ $active === 'profile' ? 'bg-primary-fixed/10 text-on-primary-fixed-variant font-bold border-r-4 border-primary' : 'hover:bg-surface-container-high transition-all' }}">
-            <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
-                <img class="w-full h-full object-cover" data-alt="A portrait photo of Carlos López" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCytkkJ7BKqvZsyq7OR3cTTJpaNAhLxxdUD6uvQQ8mY1XT8JthPj_sqdjnm4q8pOzcTrrGRbTMOiB93Q46t8Mulz4mG5Hy99uJmuR0BXrecDbxHF74YZEebG4pr8r7rLD98G0MPvqTbB0cTx4f8nP7Y4Na8h1fYFAVSvZZI81hfMNJRzyWD5Yp7eKyBX3_6gUydGZ-GjJIihvxKEV7FtrO64SgVQKKdqTleAIPgmB87asBAieAyUEyZmm3XZvNNMr9DH4PFx7h7euM"/>
+            <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden relative">
+                <template x-if="user.image">
+                    <img class="w-full h-full object-cover" :src="user.image"/>
+                </template>
+                <template x-if="!user.image">
+                    <span class="material-symbols-outlined text-white text-[20px]">person</span>
+                </template>
             </div>
             <div class="flex-1 min-w-0 text-left">
-                <p class="font-label-md text-label-md truncate text-on-surface">Carlos López</p>
-                <p class="text-[10px] text-on-surface-variant font-normal">Maestro Pastelero</p>
+                <p class="font-label-md text-label-md truncate text-on-surface" x-text="user.name || 'Cargando...'"></p>
+                <p class="text-[10px] text-on-surface-variant font-normal" x-text="user.role || ''"></p>
             </div>
         </a>
         <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error-container/20 transition-all" href="#">
@@ -79,4 +84,44 @@
             <span class="font-label-md text-label-md">Cerrar Sesión</span>
         </a>
     </div>
+    
+    <script>
+        document.addEventListener('alpine:init', () => {
+            if (!Alpine.data('sidebarUser')) {
+                Alpine.data('sidebarUser', () => ({
+                    user: {
+                        name: 'Cargando...',
+                        role: '',
+                        image: null
+                    },
+                    init() {
+                        this.fetchUser();
+                        window.addEventListener('profile-updated', (e) => {
+                            this.user = {
+                                name: e.detail.name,
+                                role: e.detail.role ? (typeof e.detail.role === 'object' ? e.detail.role.name : e.detail.role) : '',
+                                image: e.detail.image
+                            };
+                        });
+                    },
+                    async fetchUser() {
+                        try {
+                            const res = await fetch('/api/users');
+                            const users = await res.json();
+                            if (users.length > 0) {
+                                const admin = users.find(u => u.role === 'Administrador' || (u.role && u.role.name === 'Administrador')) || users[0];
+                                this.user = {
+                                    name: admin.name,
+                                    role: admin.role,
+                                    image: admin.image
+                                };
+                            }
+                        } catch (error) {
+                            console.error('Error fetching sidebar user:', error);
+                        }
+                    }
+                }));
+            }
+        });
+    </script>
 </aside>

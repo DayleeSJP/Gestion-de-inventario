@@ -29,3 +29,11 @@ Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+
+// --- API Routes ---
+Route::prefix('api')->group(function () {
+    Route::apiResource('roles', \App\Http\Controllers\Api\RoleController::class);
+    Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class);
+    Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
+});
