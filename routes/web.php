@@ -19,16 +19,33 @@ Route::post('/orders/{order}/mark-paid', [OrderController::class, 'markPaid'])->
 Route::get('/orders/{order}/ticket', [OrderController::class, 'showTicket'])->name('orders.ticket');
 Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 Route::post('/pos/checkout', [PosController::class, 'store'])->name('pos.store');
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/products', function () {
+    return view('pos.products');
+})->name('products.index');
 
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
-Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
+Route::get('/categories', function () {
+    return view('pos.categories');
+})->name('categories.index');
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::get('/reports', function () {
+    return view('pos.reports');
+})->name('reports.index');
+Route::get('/reports/sales', function () {
+    return view('pos.reports.sales');
+})->name('reports.sales');
+Route::get('/reports/inventory', function () {
+    return view('pos.reports.inventory');
+})->name('reports.inventory');
+
+Route::get('/users', function () {
+    return view('pos.users');
+})->name('users.index');
+Route::get('/roles', function () {
+    return view('pos.roles');
+})->name('roles.index');
+Route::get('/profile', function () {
+    return view('pos.profile');
+})->name('profile');
 
 // --- API Routes ---
 Route::prefix('api')->group(function () {
