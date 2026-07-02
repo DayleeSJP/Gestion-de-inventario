@@ -1,31 +1,4 @@
-<x-layouts.app>
-    <x-pos.sidebar active="users" />
-
-    <!-- Main Content Canvas -->
-    <main class="flex-1 ml-[260px] overflow-y-auto bg-background flex flex-col min-h-screen">
-        <!-- TopAppBar -->
-        <header class="sticky top-0 z-40 h-16 w-full flex items-center justify-between px-margin-page bg-surface dark:bg-surface-dim shadow-sm">
-            <div class="flex items-center gap-4">
-                <div class="bg-surface-container-high px-4 py-2 rounded-full flex items-center gap-2 w-96 border border-outline-variant/30">
-                    <span class="material-symbols-outlined text-on-surface-variant">search</span>
-                    <input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-on-surface-variant/60" placeholder="Buscar usuarios, roles..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-stack-md">
-                <button class="p-2 rounded-full hover:bg-surface-container-high text-primary transition-colors duration-200 active:opacity-80 active:scale-98">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <button class="p-2 rounded-full hover:bg-surface-container-high text-primary transition-colors duration-200 active:opacity-80 active:scale-98">
-                    <span class="material-symbols-outlined">settings</span>
-                </button>
-                <div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
-                <div class="flex items-center gap-3">
-                    <span class="font-label-md text-label-md text-on-surface font-semibold">Carlos López</span>
-                    <div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-xs">CL</div>
-                </div>
-            </div>
-        </header>
-
+<x-layouts.app active="users" title="Gestión de Usuarios">
         <!-- Page Content -->
         <div class="p-margin-page flex-1 max-w-7xl mx-auto w-full">
             <!-- Header Section -->
@@ -250,26 +223,4 @@
                 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacidad</a>
             </div>
         </footer>
-    </main>
-
-    <script>
-        document.querySelectorAll('button, a').forEach(el => {
-            el.addEventListener('mousedown', () => {
-                el.style.transform = 'scale(0.96)';
-            });
-            el.addEventListener('mouseup', () => {
-                el.style.transform = '';
-            });
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = '';
-            });
-        });
-
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', () => {
-                row.style.transition = 'all 0.3s ease';
-            });
-        });
-    </script>
 </x-layouts.app>

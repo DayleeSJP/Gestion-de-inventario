@@ -1,28 +1,4 @@
-<x-layouts.app>
-    <x-pos.sidebar active="categories" />
-
-    <!-- Main Canvas -->
-    <main class="ml-[260px] min-h-screen">
-        <!-- TopAppBar -->
-        <header class="h-16 flex justify-between items-center px-8 bg-surface border-b border-outline-variant sticky top-0 z-40">
-            <div class="flex items-center bg-surface-container-high px-4 py-2 rounded-full w-96 transition-all focus-within:ring-2 focus-within:ring-primary focus-within:bg-white">
-                <span class="material-symbols-outlined text-outline mr-2">search</span>
-                <input class="bg-transparent border-none outline-none text-body-md w-full focus:ring-0" placeholder="Buscar categoría..." type="text"/>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
-                    <span class="material-symbols-outlined">notifications</span>
-                </button>
-                <div class="h-8 w-[1px] bg-outline-variant"></div>
-                <button class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-surface-container-high transition-colors">
-                    <span class="text-label-md font-bold text-primary">Artisan POS</span>
-                    <span class="material-symbols-outlined">account_circle</span>
-                </button>
-            </div>
-        </header>
-        
-        <!-- Content Area -->
+<x-layouts.app active="categories" title="Gestión de Categorías">
         <div class="p-margin-page max-w-7xl mx-auto space-y-gutter">
             <!-- Header & Metrics -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -225,5 +201,4 @@
                 </div>
             </div>
         </div>
-    </main>
 </x-layouts.app>

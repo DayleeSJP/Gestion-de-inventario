@@ -1,26 +1,12 @@
-<x-layouts.app>
-    <x-pos.sidebar active="products" />
-
-    <!-- Main Content Canvas -->
-    <main class="ml-[260px] flex-1 min-h-screen flex flex-col overflow-x-hidden">
-        <!-- TopAppBar -->
-        <header class="sticky top-0 z-40 bg-surface-container-low px-margin-page py-stack-md flex justify-between items-center h-20">
-            <h2 class="font-headline-lg text-headline-lg text-primary">Gestión de Productos</h2>
-            <div class="flex items-center gap-stack-md">
-                <button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-body-md text-body-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
-                    <span class="material-symbols-outlined" data-icon="add">add</span>
-                    Nuevo Producto
-                </button>
-                <div class="flex gap-2">
-                    <button class="p-2.5 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors">
-                        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-                    </button>
-                    <button class="p-2.5 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors">
-                        <span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-                    </button>
-                </div>
-            </div>
-        </header>
+<x-layouts.app active="products" title="Gestión de Productos">
+    <div>
+        <!-- Acciones de la vista -->
+        <div class="px-margin-page pt-margin-page flex justify-end">
+            <button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-body-md text-body-md hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+                Nuevo Producto
+            </button>
+        </div>
         
         <!-- Filters & Search Toolbar -->
         <div class="px-margin-page py-stack-md bg-surface flex flex-wrap items-center gap-gutter">
@@ -252,5 +238,5 @@
                 <a class="hover:text-primary transition-colors" href="#">Privacidad</a>
             </div>
         </footer>
-    </main>
+    </div>
 </x-layouts.app>

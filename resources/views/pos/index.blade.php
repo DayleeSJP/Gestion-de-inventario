@@ -1,34 +1,20 @@
-<x-layouts.app>
-    <!-- Sidebar Component -->
-    <x-pos.sidebar active="dashboard" />
-
-    <!-- Main Content Area -->
-    <main class="flex-1 ml-[260px] p-8 h-screen overflow-y-auto bg-background">
-        
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-[28px] font-bold text-primary">Dashboard</h1>
-            
+<x-layouts.app active="dashboard" title="Dashboard">
+    <div class="p-8">
+        <!-- Acciones de la vista -->
+        <div class="flex justify-end items-center mb-8">
             <div class="flex items-center gap-6">
                 <!-- Search -->
                 <div class="relative">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
                     <input type="text" placeholder="Buscar..." class="w-64 pl-10 pr-4 py-2 rounded-lg bg-surface border border-surface-variant focus:outline-none focus:ring-1 focus:ring-primary text-sm shadow-sm">
                 </div>
-                
-                <!-- Notification -->
-                <div class="relative cursor-pointer">
-                    <span class="material-symbols-outlined text-gray-600 text-2xl">notifications</span>
-                    <span class="absolute top-0.5 right-0.5 w-2 h-2 bg-secondary-container rounded-full"></span>
-                </div>
-                
                 <!-- Button -->
                 <button class="bg-primary-container hover:bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm transition-colors">
                     <span class="material-symbols-outlined text-[18px]">add</span>
                     Nuevo Pedido
                 </button>
             </div>
-        </header>
+        </div>
 
         <!-- Alert Table Section -->
         <section class="bg-surface rounded-xl shadow-sm border border-surface-variant mb-8 overflow-hidden">
@@ -221,5 +207,5 @@
         <div class="text-center text-[10px] text-gray-400 font-medium pb-4">
             &copy; 2026 — Pastelería Dulce Corazón — Todos los derechos reservados
         </div>
-    </main>
+    </div>
 </x-layouts.app>

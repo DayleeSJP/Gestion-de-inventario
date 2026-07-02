@@ -1,32 +1,4 @@
-<x-layouts.app>
-    <x-pos.sidebar active="reports" />
-
-    <!-- Main Content Wrapper -->
-    <main class="ml-[260px] min-h-screen">
-        <!-- TopAppBar -->
-        <header class="flex justify-between items-center h-16 px-gutter bg-surface sticky top-0 z-40 border-b border-outline-variant">
-            <div class="flex items-center gap-4 flex-1">
-                <div class="relative w-full max-w-md">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                    <input class="w-full bg-surface-container border-none rounded-full pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary text-body-md transition-shadow" placeholder="Buscar reportes o transacciones..." type="text"/>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center transition-colors">
-                    <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-                </button>
-                <div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
-                    <div class="text-right">
-                        <p class="text-label-md font-bold text-on-surface">Daniela Cunurana</p>
-                        <p class="text-[10px] text-on-surface-variant/70 uppercase">Tienda Daniela</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold border-2 border-surface shadow-sm">
-                        DC
-                    </div>
-                </div>
-            </div>
-        </header>
-
+<x-layouts.app active="reports" title="Reporte de Ventas">
         <!-- Content Canvas -->
         <div class="p-gutter">
             <!-- Title and Action Bar -->
@@ -195,7 +167,6 @@
         <footer class="mt-stack-lg px-gutter py-8 text-center border-t border-outline-variant/20">
             <p class="text-label-md text-on-surface-variant/50">© 2026 Artisan POS — Sistema de Gestión Panadera. Todos los derechos reservados.</p>
         </footer>
-    </main>
 
     <script>
         document.querySelectorAll('button, a').forEach(el => {
