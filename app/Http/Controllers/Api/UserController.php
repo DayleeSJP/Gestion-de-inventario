@@ -25,12 +25,18 @@ class UserController extends Controller {
         return response()->json($user, 201);
     }
     public function update(Request $request, User $user) {
-        $data = $request->all();
+        $data = $request->except('image');
         if (isset($data['role'])) {
             $role = Role::firstOrCreate(['name' => $data['role']]);
             $data['role_id'] = $role->id;
             unset($data['role']);
         }
+        
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('avatars', 'public');
+            $data['image'] = '/storage/' . $path;
+        }
+
         $user->update($data);
         return response()->json($user);
     }

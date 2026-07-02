@@ -86,6 +86,7 @@
             }
         }
     </script>
+
     <style>
         body {
             background-color: #F9F3E9;
@@ -101,6 +102,7 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #bec9c6; border-radius: 10px; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+
     </style>
 </head>
 <body class="antialiased overflow-hidden flex h-screen">
