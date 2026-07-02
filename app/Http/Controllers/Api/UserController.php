@@ -1,46 +1,99 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
-use App\User;
-use App\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller {
-    public function index() { 
-        $users = User::with('role')->get()->map(function($u) {
+    public function index() {
+        $users = User::with('roles')->get()->map(function($u) {
             $data = $u->toArray();
-            $data['role'] = $u->role ? $u->role->name : 'Sin rol';
+            $data['role'] = $u->roles->first() ? $u->roles->first()->name : 'Sin rol';
+            $data['status'] = $u->status ? 'activo' : 'inactivo';
+            $data['image'] = $u->image ?? $u->avatar ?? null;
             return $data;
         });
-        return response()->json($users); 
+        return response()->json($users);
     }
     public function store(Request $request) {
-        $data = $request->all();
-        if (isset($data['role'])) {
-            $role = Role::firstOrCreate(['name' => $data['role']]);
-            $data['role_id'] = $role->id;
-            unset($data['role']);
+        $data = $request->except(['role', 'image', 'avatarColor']);
+        $data['status'] = ($request->status === 'activo' || $request->active === true);
+        if ($request->avatarColor) {
+            $data['avatar'] = $request->avatarColor; // reuse avatar field for color
         }
-        $user = User::create($data);
-        return response()->json($user, 201);
-    }
-    public function update(Request $request, User $user) {
-        $data = $request->except('image');
-        if (isset($data['role'])) {
-            $role = Role::firstOrCreate(['name' => $data['role']]);
-            $data['role_id'] = $role->id;
-            unset($data['role']);
-        }
-        
+
+        // Handle image upload
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('avatars', 'public');
             $data['image'] = '/storage/' . $path;
+        } elseif ($request->has('image') && is_string($request->image)) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
+                $image = substr($request->image, strpos($request->image, ',') + 1);
+                $type = strtolower($type[1]);
+                $image = str_replace(' ', '+', $image);
+                $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
+                \Illuminate\Support\Facades\Storage::disk('public')->put('avatars/'.$imageName, base64_decode($image));
+                $data['image'] = '/storage/avatars/' . $imageName;
+            } else {
+                $data['image'] = $request->image;
+            }
+        }
+
+        $user = User::create($data);
+
+        // Assign role via Spatie
+        if ($request->role) {
+            $role = Role::firstOrCreate(['name' => $request->role]);
+            $user->assignRole($role);
+        }
+
+        return response()->json($user, 201);
+    }
+    public function update(Request $request, $id) {
+        $user = User::findOrFail($id);
+        $data = $request->except(['role', 'image', 'avatarColor', '_method']);
+
+        if ($request->has('status')) {
+            $data['status'] = ($request->status === 'activo' || $request->status === true || $request->active === true);
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('avatars', 'public');
+            $data['image'] = '/storage/' . $path;
+        } elseif ($request->has('image') && is_string($request->image)) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
+                $image = substr($request->image, strpos($request->image, ',') + 1);
+                $type = strtolower($type[1]);
+                $image = str_replace(' ', '+', $image);
+                $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
+                \Illuminate\Support\Facades\Storage::disk('public')->put('avatars/'.$imageName, base64_decode($image));
+                $data['image'] = '/storage/avatars/' . $imageName;
+            } else {
+                $data['image'] = $request->image;
+            }
         }
 
         $user->update($data);
-        return response()->json($user);
+
+        // Update role
+        if ($request->role) {
+            $role = Role::firstOrCreate(['name' => $request->role]);
+            $user->syncRoles([$role]);
+        }
+
+        // Reload with roles
+        $user->load('roles');
+        $result = $user->toArray();
+        $result['role'] = $user->roles->first() ? $user->roles->first()->name : 'Sin rol';
+        $result['status'] = $user->status ? 'activo' : 'inactivo';
+        $result['image'] = $user->image ?? $user->avatar ?? null;
+
+        return response()->json($result);
     }
-    public function destroy(User $user) {
+    public function destroy($id) {
+        $user = User::findOrFail($id);
         $user->delete();
         return response()->json(null, 204);
     }

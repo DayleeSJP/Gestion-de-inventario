@@ -88,6 +88,8 @@
                                         <button onclick="cancelOrder('{{ $order->id }}')" class="text-error hover:bg-error-container/20 rounded-md transition-colors flex items-center justify-center w-8 h-8" title="Anular">
                                             <span class="material-symbols-outlined text-[20px]">cancel</span>
                                         </button>
+                                        @else
+                                        <div class="w-8 h-8"></div>
                                         @endif
                                     </div>
                                 </td>

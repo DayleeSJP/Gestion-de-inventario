@@ -79,10 +79,13 @@
                 <p class="text-[10px] text-on-surface-variant font-normal" x-text="user.role || ''"></p>
             </div>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error-container/20 transition-all" href="#">
-            <span class="material-symbols-outlined">logout</span>
-            <span class="font-label-md text-label-md">Cerrar Sesión</span>
-        </a>
+        <form method="POST" action="{{ route('logout') }}" x-data>
+            @csrf
+            <a @click.prevent="$root.submit()" class="flex items-center gap-3 px-4 py-3 rounded-lg text-error hover:bg-error-container/20 transition-all cursor-pointer">
+                <span class="material-symbols-outlined">logout</span>
+                <span class="font-label-md text-label-md">Cerrar Sesión</span>
+            </a>
+        </form>
     </div>
     
     <script>

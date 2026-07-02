@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'status'];
+    use HasFactory;
+
+    protected $fillable = ['name', 'description', 'icon', 'color', 'status', 'active'];
 
     protected function casts(): array
     {
         return [
             'status' => 'boolean',
+            'active' => 'boolean',
         ];
     }
 
@@ -20,7 +23,4 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-
-    /** @use HasFactory<\Database\Factories\CategoryFactory> */
-    use HasFactory;
 }

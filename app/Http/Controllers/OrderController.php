@@ -49,7 +49,7 @@ class OrderController extends Controller
 
     public function markPaid(\App\Models\Order $order)
     {
-        $order->update(['status' => 'completado']);
+        $order->update(['status' => 'pagado']);
         return response()->json(['success' => true]);
     }
 }

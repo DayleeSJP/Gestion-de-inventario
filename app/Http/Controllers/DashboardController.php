@@ -11,10 +11,10 @@ class DashboardController extends Controller
         // Top Cards Metrics
         $ventasHoy = \App\Models\Order::whereDate('created_at', today())->where('status', '!=', 'cancelado')->count();
         $ingresosMes = \App\Models\Order::whereMonth('created_at', today()->month)->where('status', '!=', 'cancelado')->sum('total_amount');
-        $productosActivos = \App\Models\Product::where('status', '!=', 'agotado')->count();
+        $productosActivos = \App\Models\Product::where('active', true)->count();
         $categoriasActivas = \App\Models\Category::where('status', true)->count();
 
-        // Pending Orders Table
+        // Pending Orders Table (status = pendiente)
         $pendingOrders = \App\Models\Order::where('status', 'pendiente')
             ->orderBy('created_at', 'desc')
             ->take(5)
@@ -37,7 +37,8 @@ class DashboardController extends Controller
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $chartLabels[] = $date->translatedFormat('D j'); // e.g., 'lun 26'
+            $dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+            $chartLabels[] = $dias[$date->dayOfWeek] . ' ' . $date->day;
             
             $dailyTotal = \App\Models\Order::whereDate('created_at', $date->toDateString())
                 ->where('status', '!=', 'cancelado')
