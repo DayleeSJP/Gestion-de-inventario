@@ -67,12 +67,12 @@
                                           x-text="provider.status ? 'Activo' : 'Inactivo'">
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button @click="editProvider(provider)" class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary-container/20 rounded-lg transition-colors" title="Editar">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3 transition-opacity">
+                                        <button @click="editProvider(provider)" class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Editar">
                                             <span class="material-symbols-outlined text-[20px]">edit</span>
                                         </button>
-                                        <button @click="deleteProvider(provider.id)" class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-lg transition-colors" title="Eliminar">
+                                        <button @click="deleteProvider(provider.id)" class="text-on-surface-variant hover:text-error transition-colors p-1" title="Eliminar">
                                             <span class="material-symbols-outlined text-[20px]">delete</span>
                                         </button>
                                     </div>
@@ -221,12 +221,13 @@
                         },
                         body: JSON.stringify(this.form)
                     })
-                    .then(res => {
+                    .then(async res => {
                         if (res.ok) {
                             this.fetchProviders();
                             this.closeModal();
                         } else {
-                            alert("Ocurrió un error al guardar.");
+                            const text = await res.text();
+                            alert("Error del servidor: " + res.status + "\n" + text);
                         }
                     })
                     .finally(() => {
