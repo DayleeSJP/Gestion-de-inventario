@@ -45,6 +45,10 @@
                 <span class="material-symbols-outlined">category</span>
                 <span class="text-body-md">Categorías</span>
             </a>
+            <a class="flex items-center gap-3 px-4 py-3 {{ $active === 'providers' ? 'bg-primary-container text-on-primary-container font-bold scale-[0.98]' : 'text-on-surface-variant hover:text-primary hover:bg-surface-variant/50' }} transition-colors rounded-lg" href="/providers">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span class="text-body-md">Proveedores</span>
+            </a>
         </div>
         
         <!-- Administración Section -->

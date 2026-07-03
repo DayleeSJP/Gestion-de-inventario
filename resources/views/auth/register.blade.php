@@ -1,4 +1,4 @@
-<x-layouts.guest title="Iniciar Sesión">
+<x-layouts.guest title="Registrarse">
     <div class="flex min-h-screen w-full">
         <!-- Left Side: Image / Branding -->
         <div class="hidden lg:flex w-1/2 relative bg-surface-variant overflow-hidden">
@@ -19,7 +19,7 @@
                         <h1 class="text-3xl font-bold font-headline-lg tracking-tight">Dulce Corazón</h1>
                     </div>
                     <p class="text-white/80 font-body-lg max-w-md leading-relaxed">
-                        Sistema Integral de Gestión. Administra tu inventario, ventas y personal con la mejor herramienta para tu pastelería artesanal.
+                        Únete a la familia Dulce Corazón y comienza a gestionar de manera profesional las operaciones de la pastelería.
                     </p>
                 </div>
                 
@@ -37,21 +37,21 @@
             </div>
         </div>
 
-        <!-- Right Side: Login Form -->
-        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 bg-surface-container-lowest">
-            <div class="w-full max-w-md">
+        <!-- Right Side: Register Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 bg-surface-container-lowest h-screen overflow-y-auto">
+            <div class="w-full max-w-md my-auto">
                 
                 <!-- Mobile Logo (Visible solo en mobile) -->
-                <div class="lg:hidden flex items-center gap-3 mb-10 justify-center">
+                <div class="lg:hidden flex items-center gap-3 mb-8 justify-center">
                     <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                         <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
                     </div>
                     <h1 class="text-2xl font-bold text-primary font-headline-md tracking-tight">Dulce Corazón</h1>
                 </div>
 
-                <div class="text-center lg:text-left mb-10">
-                    <h2 class="text-headline-xl font-headline-xl font-bold text-on-surface mb-2">¡Bienvenido de vuelta! 👋</h2>
-                    <p class="text-body-lg text-on-surface-variant">Por favor, ingresa tus credenciales para acceder a tu cuenta.</p>
+                <div class="text-center lg:text-left mb-8">
+                    <h2 class="text-headline-xl font-headline-xl font-bold text-on-surface mb-2">Crear una cuenta ✨</h2>
+                    <p class="text-body-lg text-on-surface-variant">Completa tus datos para registrarte en el sistema.</p>
                 </div>
 
                 <!-- Errores globales -->
@@ -59,22 +59,33 @@
                     <div class="mb-6 p-4 rounded-xl bg-error-container/30 border border-error/20 flex items-start gap-3 animate-[fade-in_0.3s_ease-out]">
                         <span class="material-symbols-outlined text-error mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
                         <div>
-                            <h4 class="text-error font-bold text-label-md">Error de Autenticación</h4>
+                            <h4 class="text-error font-bold text-label-md">Error en el Registro</h4>
                             <p class="text-error/90 text-body-sm mt-1">{{ $errors->first() }}</p>
                         </div>
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login.post') }}" class="space-y-6" x-data="{ showPassword: false }">
+                <form method="POST" action="{{ route('register.post') }}" class="space-y-5" x-data="{ showPassword: false, showConfirmPassword: false }">
                     @csrf
                     
+                    <!-- Nombre -->
+                    <div class="space-y-2">
+                        <label for="name" class="block font-label-md text-label-md text-on-surface font-semibold">Nombre Completo</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
+                            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
+                                class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none @error('name') border-error bg-error/5 @enderror" 
+                                placeholder="Juan Pérez">
+                        </div>
+                    </div>
+
                     <!-- Email -->
                     <div class="space-y-2">
                         <label for="email" class="block font-label-md text-label-md text-on-surface font-semibold">Correo Electrónico</label>
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
-                            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none @error('email') border-error bg-error/5 @enderror" 
+                            <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                                class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none @error('email') border-error bg-error/5 @enderror" 
                                 placeholder="tu@correo.com">
                         </div>
                     </div>
@@ -85,7 +96,7 @@
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
                             <input id="password" :type="showPassword ? 'text' : 'password'" name="password" required
-                                class="w-full pl-12 pr-12 py-3.5 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none @error('password') border-error bg-error/5 @enderror" 
+                                class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none @error('password') border-error bg-error/5 @enderror" 
                                 placeholder="••••••••">
                             <button type="button" @click="showPassword = !showPassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors focus:outline-none">
                                 <span class="material-symbols-outlined" x-text="showPassword ? 'visibility_off' : 'visibility'"></span>
@@ -93,26 +104,31 @@
                         </div>
                     </div>
 
-                    <!-- Options -->
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/50 transition-colors cursor-pointer accent-primary">
-                            <span class="text-body-md text-on-surface-variant font-medium group-hover:text-on-surface transition-colors">Recordarme</span>
-                        </label>
-                        <a href="#" class="text-body-md text-primary font-bold hover:underline">¿Olvidaste tu contraseña?</a>
+                    <!-- Confirm Password -->
+                    <div class="space-y-2">
+                        <label for="password_confirmation" class="block font-label-md text-label-md text-on-surface font-semibold">Confirmar Contraseña</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock_reset</span>
+                            <input id="password_confirmation" :type="showConfirmPassword ? 'text' : 'password'" name="password_confirmation" required
+                                class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-xl font-body-lg text-body-lg text-on-surface transition-all outline-none" 
+                                placeholder="••••••••">
+                            <button type="button" @click="showConfirmPassword = !showConfirmPassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined" x-text="showConfirmPassword ? 'visibility_off' : 'visibility'"></span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Submit -->
                     <button type="submit" 
-                        class="w-full py-3.5 bg-primary text-on-primary font-bold text-label-lg rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                        <span>Iniciar Sesión</span>
-                        <span class="material-symbols-outlined">arrow_forward</span>
+                        class="w-full py-3.5 mt-4 bg-primary text-on-primary font-bold text-label-lg rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <span>Registrarme</span>
+                        <span class="material-symbols-outlined">person_add</span>
                     </button>
                     
                     <div class="text-center mt-6">
                         <p class="text-body-md text-on-surface-variant">
-                            ¿No tienes una cuenta? 
-                            <a href="{{ route('register') }}" class="text-primary font-bold hover:underline transition-colors">Regístrate aquí</a>
+                            ¿Ya tienes una cuenta? 
+                            <a href="{{ route('login') }}" class="text-primary font-bold hover:underline transition-colors">Inicia Sesión aquí</a>
                         </p>
                     </div>
                 </form>

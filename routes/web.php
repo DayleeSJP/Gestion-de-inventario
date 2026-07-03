@@ -17,6 +17,8 @@ use App\Http\Controllers\AuthController;
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -41,9 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports', function () {
         return view('pos.reports');
     })->name('reports.index');
-    Route::get('/reports/sales', function () {
-        return view('pos.reports.sales');
-    })->name('reports.sales');
+    Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
     Route::get('/reports/inventory', function () {
         return view('pos.reports.inventory');
     })->name('reports.inventory');
@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/roles', function () {
         return view('pos.roles');
     })->name('roles.index');
+    Route::get('/providers', function () {
+        return view('pos.providers');
+    })->name('providers.index');
     Route::get('/profile', function () {
         return view('pos.profile');
     })->name('profile');
@@ -64,5 +67,6 @@ Route::middleware('auth')->group(function () {
         Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
         Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class);
         Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
+        Route::apiResource('providers', \App\Http\Controllers\Api\ProviderController::class);
     });
 });
