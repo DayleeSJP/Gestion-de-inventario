@@ -16,10 +16,10 @@
                         <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
                             <span class="material-symbols-outlined text-[32px] text-white" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
                         </div>
-                        <h1 class="text-3xl font-bold font-headline-lg tracking-tight">Dulce Corazón</h1>
+                        <h1 class="text-3xl font-bold font-headline-lg tracking-tight">Dulce Tentación</h1>
                     </div>
                     <p class="text-white/80 font-body-lg max-w-md leading-relaxed">
-                        Únete a la familia Dulce Corazón y comienza a gestionar de manera profesional las operaciones de la pastelería.
+                        Únete a la familia Dulce Tentación y comienza a gestionar de manera profesional las operaciones de la pastelería.
                     </p>
                 </div>
                 
@@ -46,11 +46,7 @@
                     <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                         <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
                     </div>
-                    <h1 class="text-2xl font-bold text-primary font-headline-md tracking-tight">Dulce Corazón</h1>
-                </div>
-
-                <div class="text-center lg:text-left mb-8">
-                    <h2 class="text-headline-xl font-headline-xl font-bold text-on-surface mb-2">Crear una cuenta ✨</h2>
+                        <h1 class="text-2xl font-bold text-primary font-headline-md tracking-tight">Dulce Tentación</h1>
                     <p class="text-body-lg text-on-surface-variant">Completa tus datos para registrarte en el sistema.</p>
                 </div>
 

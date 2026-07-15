@@ -109,7 +109,7 @@
 
     <div class="ticket">
         <div class="header">
-            <h1>Dulce Corazón</h1>
+            <h1>Dulce Tentación</h1>
             <p>Ticket de Venta #: {{ $order->id }}</p>
         </div>
 

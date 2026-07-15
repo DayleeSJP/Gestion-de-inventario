@@ -52,10 +52,10 @@
                     <div class="relative z-10">
                         <p class="text-on-primary-container/80 text-headline-md font-headline-md mb-2">Valor Total del Inventario <span class="text-label-md opacity-70">(a precio de costo)</span></p>
                         <div class="flex items-baseline gap-4">
-                            <h3 class="text-[56px] leading-none font-bold text-on-primary-container tracking-tighter">S/ 36,234.76</h3>
+                            <h3 class="text-[56px] leading-none font-bold text-on-primary-container tracking-tighter">S/ {{ number_format($totalInventoryValue, 2) }}</h3>
                             <div class="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-on-primary-container">
-                                <span class="material-symbols-outlined text-sm">trending_up</span>
-                                <span class="text-label-md">+4.2%</span>
+                                <span class="material-symbols-outlined text-sm">inventory_2</span>
+                                <span class="text-label-md">{{ $products->count() }} productos</span>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     <div class="flex gap-2">
                         <span class="flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container rounded-full text-label-sm font-bold">
                             <span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
-                            3 Stock Crítico
+                            {{ $lowStockCount }} Stock Crítico
                         </span>
                     </div>
                 </div>
@@ -89,128 +89,48 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-outline-variant/20">
-                            <!-- Low Stock Item -->
-                            <tr class="hover:bg-surface-container/50 transition-colors bg-error-container/5">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
-                                            <span class="material-symbols-outlined text-primary">bakery_dining</span>
+                            @forelse($products as $product)
+                                @php
+                                    $stockStatus = $product->stock == 0 ? 'Agotado' : (($product->stock <= ($product->min_stock ?? 0)) ? 'Bajo Stock' : 'Saludable');
+                                    $statusClass = $product->stock == 0 ? 'bg-error-container text-on-error-container' : (($product->stock <= ($product->min_stock ?? 0)) ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-fixed text-on-primary-fixed-variant');
+                                @endphp
+                                <tr class="hover:bg-surface-container/50 transition-colors {{ $product->stock <= ($product->min_stock ?? 0) ? 'bg-error-container/5' : '' }}">
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+                                                @if($product->image)
+                                                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover" />
+                                                @else
+                                                    <span class="material-symbols-outlined text-primary">bakery_dining</span>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <p class="text-body-md font-bold text-on-surface leading-tight">{{ $product->name }}</p>
+                                                <p class="text-label-sm text-on-surface-variant">{{ $product->category->name ?? 'Sin categoría' }}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-body-md font-bold text-on-surface leading-tight">Camote rojo</p>
-                                            <p class="text-label-sm text-on-surface-variant">Tubérculos frescos</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="text-headline-md font-bold text-error">2.30</span> <span class="text-label-sm text-on-surface-variant">kg</span>
-                                </td>
-                                <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">1.00 kg</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 1.20</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 2.10</td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm font-bold">Bajo Stock</span>
-                                </td>
-                            </tr>
-                            
-                            <!-- Normal Stock Items -->
-                            <tr class="hover:bg-surface-container/50 transition-colors">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
-                                            <span class="material-symbols-outlined text-primary">fastfood</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-body-md font-bold text-on-surface leading-tight">Doritos</p>
-                                            <p class="text-label-sm text-on-surface-variant">Snacks salados</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="text-headline-md font-bold text-on-surface">15</span> <span class="text-label-sm text-on-surface-variant">und</span>
-                                </td>
-                                <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">5 und</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 1.20</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 2.00</td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-label-sm font-bold">Saludable</span>
-                                </td>
-                            </tr>
-                            
-                            <tr class="hover:bg-surface-container/50 transition-colors">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
-                                            <span class="material-symbols-outlined text-primary">cookie</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-body-md font-bold text-on-surface leading-tight">Galletas Oreo</p>
-                                            <p class="text-label-sm text-on-surface-variant">Snacks dulces</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="text-headline-md font-bold text-on-surface">6</span> <span class="text-label-sm text-on-surface-variant">und</span>
-                                </td>
-                                <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">5 und</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 1.00</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 2.00</td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm font-bold">Límite</span>
-                                </td>
-                            </tr>
-                            
-                            <tr class="hover:bg-surface-container/50 transition-colors">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
-                                            <span class="material-symbols-outlined text-primary">egg</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-body-md font-bold text-on-surface leading-tight">Huevo</p>
-                                            <p class="text-label-sm text-on-surface-variant">Abarrotes</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="text-headline-md font-bold text-on-surface">12.00</span> <span class="text-label-sm text-on-surface-variant">kg</span>
-                                </td>
-                                <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">6.00 kg</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 4.00</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 5.20</td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-label-sm font-bold">Saludable</span>
-                                </td>
-                            </tr>
-                            
-                            <!-- Large Scale Item -->
-                            <tr class="hover:bg-surface-container/50 transition-colors">
-                                <td class="px-8 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
-                                            <span class="material-symbols-outlined text-primary">grain</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-body-md font-bold text-on-surface leading-tight">Maiz entero</p>
-                                            <p class="text-label-sm text-on-surface-variant">Granos y cereales</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="text-headline-md font-bold text-on-surface">30,000.00</span> <span class="text-label-sm text-on-surface-variant">kg</span>
-                                </td>
-                                <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">1,000.00 kg</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 1.20</td>
-                                <td class="px-8 py-5 text-right font-mono text-body-md">S/ 1.70</td>
-                                <td class="px-8 py-5 text-center">
-                                    <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-label-sm font-bold">Sobre-stock</span>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="px-8 py-5 text-center">
+                                        <span class="text-headline-md font-bold text-on-surface">{{ number_format($product->stock ?? 0, 2, '.', ',') }}</span>
+                                        <span class="text-label-sm text-on-surface-variant">{{ $product->stock_unit ?? 'und' }}</span>
+                                    </td>
+                                    <td class="px-8 py-5 text-center text-body-md text-on-surface-variant">{{ number_format($product->min_stock ?? 0, 2, '.', ',') }} {{ $product->stock_unit ?? 'und' }}</td>
+                                    <td class="px-8 py-5 text-right font-mono text-body-md">S/ {{ number_format($product->cost_price ?? 0, 2) }}</td>
+                                    <td class="px-8 py-5 text-right font-mono text-body-md">S/ {{ number_format($product->selling_price ?? ($product->price ?? 0), 2) }}</td>
+                                    <td class="px-8 py-5 text-center">
+                                        <span class="px-3 py-1 rounded-full text-label-sm font-bold {{ $statusClass }}">{{ $stockStatus }}</span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-8 py-10 text-center text-body-md text-on-surface-variant">No hay productos registrados.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
                 <div class="px-8 py-6 bg-surface-container-low/30 border-t border-outline-variant/30 flex justify-between items-center">
-                    <p class="text-label-md text-on-surface-variant">Mostrando 1-10 de 156 productos</p>
+                    <p class="text-label-md text-on-surface-variant">Mostrando 1-{{ min($products->count(), 10) }} de {{ $products->count() }} productos</p>
                     <div class="flex items-center gap-2">
                         <button class="w-10 h-10 rounded-lg flex items-center justify-center border border-outline-variant hover:bg-surface-container-high transition-colors">
                             <span class="material-symbols-outlined">chevron_left</span>
@@ -253,7 +173,7 @@
     <div id="print-inv-area" style="display:none;">
         <div style="display:flex; justify-content:space-between; font-size:11px; color:#555; margin-bottom:8px;">
             <span id="inv-datetime"></span>
-            <span>GestionPRO — Sistema de Gestión</span>
+            <span>Dulce Tentación — Sistema de Gestión</span>
         </div>
         <h2 style="font-size:20px; font-weight:bold; margin-bottom:4px;">📦 Reporte de Inventario</h2>
         <p style="font-size:11px; color:#03645c; margin-bottom:16px;">Generado el: <strong id="inv-gendate"></strong></p>
@@ -263,15 +183,15 @@
         <table style="width:100%; border-collapse:collapse; margin-bottom:16px; font-size:12px;">
             <tr style="background:#f5f5f5;">
                 <td style="border:1px solid #ccc; padding:5px 10px;">Valor Total (precio costo)</td>
-                <td style="border:1px solid #ccc; padding:5px 10px; color:#03645c; font-weight:bold;">S/ 36,234.76</td>
+                <td style="border:1px solid #ccc; padding:5px 10px; color:#03645c; font-weight:bold;">S/ {{ number_format($totalInventoryValue, 2) }}</td>
             </tr>
             <tr>
                 <td style="border:1px solid #ccc; padding:5px 10px;">Productos con Stock Crítico</td>
-                <td style="border:1px solid #ccc; padding:5px 10px; color:#ba1a1a; font-weight:bold;">3</td>
+                <td style="border:1px solid #ccc; padding:5px 10px; color:#ba1a1a; font-weight:bold;">{{ $lowStockCount }}</td>
             </tr>
             <tr style="background:#f5f5f5;">
                 <td style="border:1px solid #ccc; padding:5px 10px;">Total de Productos</td>
-                <td style="border:1px solid #ccc; padding:5px 10px;">156</td>
+                <td style="border:1px solid #ccc; padding:5px 10px;">{{ $products->count() }}</td>
             </tr>
         </table>
 
@@ -290,54 +210,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="background:#fff0f0;">
-                    <td style="border:1px solid #ccc; padding:5px 8px;">Camote rojo</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">Tubérculos frescos</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#ba1a1a; font-weight:bold;">2.30 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">1.00 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 1.20</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 2.10</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#954912; font-weight:bold;">Bajo Stock</td>
+                @forelse($products as $product)
+                    @php
+                        $stockStatus = $product->stock == 0 ? 'Agotado' : (($product->stock <= ($product->min_stock ?? 0)) ? 'Bajo Stock' : 'Saludable');
+                        $statusStyle = $product->stock == 0 ? 'color:#ba1a1a; font-weight:bold;' : (($product->stock <= ($product->min_stock ?? 0)) ? 'color:#954912; font-weight:bold;' : 'color:#03645c; font-weight:bold;');
+                    @endphp
+                <tr style="{{ $loop->even ? 'background:#f5f5f5;' : '' }}">
+                    <td style="border:1px solid #ccc; padding:5px 8px;">{{ $product->name }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">{{ $product->category->name ?? 'Sin categoría' }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">{{ number_format($product->stock ?? 0, 2, '.', ',') }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">{{ number_format($product->min_stock ?? 0, 2, '.', ',') }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ {{ number_format($product->cost_price ?? 0, 2) }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ {{ number_format($product->selling_price ?? ($product->price ?? 0), 2) }}</td>
+                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; {{ $statusStyle }}">{{ $stockStatus }}</td>
                 </tr>
+                @empty
                 <tr>
-                    <td style="border:1px solid #ccc; padding:5px 8px;">Doritos</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">Snacks salados</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">15 und</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">5 und</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 1.20</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 2.00</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#03645c; font-weight:bold;">Saludable</td>
+                    <td colspan="7" style="border:1px solid #ccc; padding:10px; text-align:center;">No hay productos registrados.</td>
                 </tr>
-                <tr style="background:#f5f5f5;">
-                    <td style="border:1px solid #ccc; padding:5px 8px;">Galletas Oreo</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">Snacks dulces</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">6 und</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">5 und</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 1.00</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 2.00</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#954912; font-weight:bold;">Límite</td>
-                </tr>
-                <tr>
-                    <td style="border:1px solid #ccc; padding:5px 8px;">Huevo</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">Abarrotes</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">12.00 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">6.00 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 4.00</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 5.20</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#03645c; font-weight:bold;">Saludable</td>
-                </tr>
-                <tr style="background:#f5f5f5;">
-                    <td style="border:1px solid #ccc; padding:5px 8px;">Maiz entero</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">Granos y cereales</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">30,000.00 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center;">1,000.00 kg</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 1.20</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:right;">S/ 1.70</td>
-                    <td style="border:1px solid #ccc; padding:5px 8px; text-align:center; color:#03645c; font-weight:bold;">Sobre-stock</td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
-        <p style="font-size:10px; color:#aaa; text-align:center; margin-top:24px;">© 2026 Pastelería Dulce Corazón · Sistema de Gestión</p>
+        <p style="font-size:10px; color:#aaa; text-align:center; margin-top:24px;">© 2026 Dulce Tentación · Sistema de Gestión</p>
     </div>
 
     <script>
@@ -363,7 +257,7 @@
             var titulo = 'Reporte de Inventario — ' + fecha;
 
             var workbook = new ExcelJS.Workbook();
-            workbook.creator = 'GestionPRO';
+            workbook.creator = 'Dulce Tentación';
             var ws = workbook.addWorksheet('Inventario', { pageSetup: { paperSize: 9, orientation: 'landscape' } });
 
             ws.columns = [
@@ -508,7 +402,7 @@
             doc.setFontSize(8);
             doc.setTextColor(120,120,120);
             doc.text(new Date().toLocaleString('es-PE'), 14, 10);
-            doc.text('GestionPRO — Sistema de Gestión', pageW - 14, 10, { align: 'right' });
+            doc.text('Dulce Tentación — Sistema de Gestión', pageW - 14, 10, { align: 'right' });
 
             // Título
             doc.setFontSize(20);
@@ -588,7 +482,7 @@
                 doc.setPage(i);
                 doc.setFontSize(8);
                 doc.setTextColor(180,180,180);
-                doc.text('© 2026 Pastelería Dulce Corazón · Sistema de Gestión', pageW / 2, 205, { align: 'center' });
+                doc.text('© 2026 Dulce Tentación · Sistema de Gestión', pageW / 2, 205, { align: 'center' });
                 doc.text('Página ' + i + ' / ' + totalPages, pageW - 14, 205, { align: 'right' });
             }
 

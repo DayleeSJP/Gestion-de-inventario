@@ -2,10 +2,10 @@
 
 <aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-low dark:bg-surface-dim shadow-sm flex flex-col py-margin-page px-stack-md z-50">
     <div class="flex flex-col gap-2 mb-8 px-2">
-        <img alt="Pastelería Dulce Corazón Logo" class="w-12 h-12 rounded-xl object-cover mb-2" src="https://lh3.googleusercontent.com/aida/AP1WRLuFe0WYc3_sFgrFIAjokrDvKQSoF1u_IMYbhNWl1RR38hyJ0lpz0QNFWQZNCNEClsh_eHctjqrLUjkmrneZ62zkrZ5ihH3xXjKBuLGKuS1I2PNwlm2_Tr7ikiK1i0yrmwsCH06ks-zGnBpyrNxbjuc1FtQXjiZ4Jg90R_TVuveq1eIN7SbiFcI_nrwVk6PyaZyZ_hlVErESa4-wbnBMIijP-OYHMaWuC-5UFMCyQTm0IMcq6JtgFHGsauM">
+        <img alt="Dulce Tentación Logo" class="w-12 h-12 rounded-xl object-cover mb-2" src="/logo.svg">
         <div class="flex flex-col">
             <h1 class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary leading-tight">
-                Pastelería Dulce Corazón
+                Dulce Tentación
             </h1>
             <span class="text-label-md font-label-md text-on-surface-variant opacity-70">Sistema de Gestión</span>
         </div>

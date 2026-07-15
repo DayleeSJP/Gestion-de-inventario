@@ -171,7 +171,7 @@
         
         <!-- Footer Info -->
         <div class="text-center text-[10px] text-gray-400 font-medium pb-4">
-            &copy; 2026 — Pastelería Dulce Corazón — Todos los derechos reservados
+            &copy; 2026 — Dulce Tentación — Todos los derechos reservados
         </div>
     </div>
 

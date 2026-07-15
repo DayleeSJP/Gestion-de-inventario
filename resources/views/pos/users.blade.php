@@ -11,7 +11,7 @@
                     <h2 class="font-headline-xl text-headline-xl text-on-surface">Gestión de Usuarios</h2>
                 </div>
                 <p class="text-on-surface-variant font-body-md max-w-2xl">
-                    Administra el personal de la pastelería, define sus accesos al sistema y mantén actualizado el registro de colaboradores de Dulce Corazón.
+                    Administra el personal de la pastelería, define sus accesos al sistema y mantén actualizado el registro de colaboradores de Dulce Tentación.
                 </p>
             </div>
             <button @click="openModal()" class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:shadow-lg transition-all active:scale-95">
@@ -149,7 +149,7 @@
 
         <!-- Footer -->
         <footer class="mt-8 pb-4 text-center">
-            <span class="font-label-sm text-label-sm text-on-surface-variant">© 2026 Pastelería Dulce Corazón · Sistema de Gestión Artisanal</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">© 2026 Dulce Tentación · Sistema de Gestión Artisanal</span>
         </footer>
 
         <!-- ==================== Modal Nuevo / Editar Usuario ==================== -->

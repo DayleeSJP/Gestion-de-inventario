@@ -106,7 +106,7 @@
 
             <!-- Page Footer Information -->
             <footer class="mt-stack-lg text-center pb-8">
-                <p class="text-label-md text-outline opacity-60">© 2026 — Pastelería Dulce Corazón · Gestión Segura de Datos</p>
+                <p class="text-label-md text-outline opacity-60">© 2026 — Dulce Tentación · Gestión Segura de Datos</p>
             </footer>
 
             <!-- Modal Nuevo/Editar Rol -->

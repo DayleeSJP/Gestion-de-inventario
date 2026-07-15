@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ReportController extends Controller
 {
@@ -21,7 +22,7 @@ class ReportController extends Controller
             })
             ->groupBy('product_id')
             ->orderBy('total_quantity', 'desc')
-            ->with('product:id,name,category')
+            ->with('product:id,name')
             ->take(5)
             ->get();
 
@@ -38,5 +39,20 @@ class ReportController extends Controller
         });
 
         return view('pos.reports.sales', compact('totalRevenue', 'totalSalesCount', 'topProducts', 'last7Days'));
+    }
+
+    public function inventory()
+    {
+        $products = Product::with('category')->get();
+
+        $totalInventoryValue = $products->sum(function ($product) {
+            return ($product->cost_price ?? 0) * ($product->stock ?? 0);
+        });
+
+        $lowStockCount = $products->filter(function ($product) {
+            return isset($product->stock, $product->min_stock) && $product->stock <= $product->min_stock;
+        })->count();
+
+        return view('pos.reports.inventory', compact('products', 'totalInventoryValue', 'lowStockCount'));
     }
 }

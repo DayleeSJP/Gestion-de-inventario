@@ -25,16 +25,26 @@ class UserController extends Controller {
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('avatars', 'public');
-            $data['image'] = '/storage/' . $path;
+            $file = $request->file('image');
+            $avatarsPath = public_path('avatars');
+            if (!file_exists($avatarsPath)) {
+                mkdir($avatarsPath, 0755, true);
+            }
+            $imageName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
+            $file->move($avatarsPath, $imageName);
+            $data['image'] = '/avatars/' . $imageName;
         } elseif ($request->has('image') && is_string($request->image)) {
-            if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
+            if (preg_match('/^data:image\/([\w]+);base64,/', $request->image, $type)) {
                 $image = substr($request->image, strpos($request->image, ',') + 1);
                 $type = strtolower($type[1]);
                 $image = str_replace(' ', '+', $image);
                 $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
-                \Illuminate\Support\Facades\Storage::disk('public')->put('avatars/'.$imageName, base64_decode($image));
-                $data['image'] = '/storage/avatars/' . $imageName;
+                $avatarsPath = public_path('avatars');
+                if (!file_exists($avatarsPath)) {
+                    mkdir($avatarsPath, 0755, true);
+                }
+                file_put_contents($avatarsPath . '/' . $imageName, base64_decode($image));
+                $data['image'] = '/avatars/' . $imageName;
             } else {
                 $data['image'] = $request->image;
             }
@@ -60,16 +70,26 @@ class UserController extends Controller {
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('avatars', 'public');
-            $data['image'] = '/storage/' . $path;
+            $file = $request->file('image');
+            $avatarsPath = public_path('avatars');
+            if (!file_exists($avatarsPath)) {
+                mkdir($avatarsPath, 0755, true);
+            }
+            $imageName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
+            $file->move($avatarsPath, $imageName);
+            $data['image'] = '/avatars/' . $imageName;
         } elseif ($request->has('image') && is_string($request->image)) {
             if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
                 $image = substr($request->image, strpos($request->image, ',') + 1);
                 $type = strtolower($type[1]);
                 $image = str_replace(' ', '+', $image);
                 $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
-                \Illuminate\Support\Facades\Storage::disk('public')->put('avatars/'.$imageName, base64_decode($image));
-                $data['image'] = '/storage/avatars/' . $imageName;
+                $avatarsPath = public_path('avatars');
+                if (!file_exists($avatarsPath)) {
+                    mkdir($avatarsPath, 0755, true);
+                }
+                file_put_contents($avatarsPath . '/' . $imageName, base64_decode($image));
+                $data['image'] = '/avatars/' . $imageName;
             } else {
                 $data['image'] = $request->image;
             }

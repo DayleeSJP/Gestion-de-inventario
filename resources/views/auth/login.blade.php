@@ -16,7 +16,7 @@
                         <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
                             <span class="material-symbols-outlined text-[32px] text-white" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
                         </div>
-                        <h1 class="text-3xl font-bold font-headline-lg tracking-tight">Dulce Corazón</h1>
+                        <h1 class="text-3xl font-bold font-headline-lg tracking-tight">Dulce Tentación</h1>
                     </div>
                     <p class="text-white/80 font-body-lg max-w-md leading-relaxed">
                         Sistema Integral de Gestión. Administra tu inventario, ventas y personal con la mejor herramienta para tu pastelería artesanal.
@@ -46,11 +46,7 @@
                     <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                         <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
                     </div>
-                    <h1 class="text-2xl font-bold text-primary font-headline-md tracking-tight">Dulce Corazón</h1>
-                </div>
-
-                <div class="text-center lg:text-left mb-10">
-                    <h2 class="text-headline-xl font-headline-xl font-bold text-on-surface mb-2">¡Bienvenido de vuelta! 👋</h2>
+                        <h1 class="text-2xl font-bold text-primary font-headline-md tracking-tight">Dulce Tentación</h1>
                     <p class="text-body-lg text-on-surface-variant">Por favor, ingresa tus credenciales para acceder a tu cuenta.</p>
                 </div>
 

@@ -44,9 +44,7 @@ Route::middleware('auth')->group(function () {
         return view('pos.reports');
     })->name('reports.index');
     Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
-    Route::get('/reports/inventory', function () {
-        return view('pos.reports.inventory');
-    })->name('reports.inventory');
+    Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');
 
     Route::get('/users', function () {
         return view('pos.users');

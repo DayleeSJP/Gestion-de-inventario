@@ -37,8 +37,14 @@ class ProductController extends Controller {
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = '/storage/' . $path;
+            $file = $request->file('image');
+            $productsPath = public_path('products');
+            if (!file_exists($productsPath)) {
+                mkdir($productsPath, 0755, true);
+            }
+            $imageName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
+            $file->move($productsPath, $imageName);
+            $data['image'] = '/products/' . $imageName;
             $data['image_path'] = $data['image'];
         } elseif ($request->has('image') && is_string($request->image)) {
             if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
@@ -47,8 +53,12 @@ class ProductController extends Controller {
                 
                 $image = str_replace(' ', '+', $image);
                 $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
-                \Illuminate\Support\Facades\Storage::disk('public')->put('products/'.$imageName, base64_decode($image));
-                $data['image'] = '/storage/products/' . $imageName;
+                $productsPath = public_path('products');
+                if (!file_exists($productsPath)) {
+                    mkdir($productsPath, 0755, true);
+                }
+                file_put_contents($productsPath . '/' . $imageName, base64_decode($image));
+                $data['image'] = '/products/' . $imageName;
                 $data['image_path'] = $data['image'];
             } else {
                 $data['image'] = $request->image;
@@ -77,8 +87,14 @@ class ProductController extends Controller {
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image'] = '/storage/' . $path;
+            $file = $request->file('image');
+            $productsPath = public_path('products');
+            if (!file_exists($productsPath)) {
+                mkdir($productsPath, 0755, true);
+            }
+            $imageName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
+            $file->move($productsPath, $imageName);
+            $data['image'] = '/products/' . $imageName;
             $data['image_path'] = $data['image'];
         } elseif ($request->has('image') && is_string($request->image)) {
             if (preg_match('/^data:image\/(\w+);base64,/', $request->image, $type)) {
@@ -87,8 +103,12 @@ class ProductController extends Controller {
                 
                 $image = str_replace(' ', '+', $image);
                 $imageName = \Illuminate\Support\Str::random(10).'.'.$type;
-                \Illuminate\Support\Facades\Storage::disk('public')->put('products/'.$imageName, base64_decode($image));
-                $data['image'] = '/storage/products/' . $imageName;
+                $productsPath = public_path('products');
+                if (!file_exists($productsPath)) {
+                    mkdir($productsPath, 0755, true);
+                }
+                file_put_contents($productsPath . '/' . $imageName, base64_decode($image));
+                $data['image'] = '/products/' . $imageName;
                 $data['image_path'] = $data['image'];
             } else {
                 $data['image'] = $request->image;
